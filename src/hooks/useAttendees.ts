@@ -21,12 +21,12 @@ export function useAttendees(eventId: string | null) {
         setLoading(true);
         const { data, error } = await supabase
             .from("attendees")
-            .select("id, event_id, full_name, email, contact_number, company, role, face_encoding, qr_code_value, claimed_status, created_at")
+            .select("*")
             .eq("event_id", eventId)
             .order("created_at", { ascending: false });
 
         if (error) {
-            console.error("Error fetching attendees:", error);
+            console.error("Error fetching attendees:", error.message || JSON.stringify(error));
             setLoading(false);
             return;
         }
@@ -78,22 +78,31 @@ export function useAttendees(eventId: string | null) {
         if (searchQuery) {
             const q = searchQuery.toLowerCase();
             const matchesSearch =
-                a.full_name.toLowerCase().includes(q) ||
-                a.email.toLowerCase().includes(q) ||
-                a.company.toLowerCase().includes(q) ||
-                a.qr_code_value.toLowerCase().includes(q);
+                (a.full_name && a.full_name.toLowerCase().includes(q)) ||
+                (a.email && a.email.toLowerCase().includes(q)) ||
+                (a.company && a.company.toLowerCase().includes(q)) ||
+                (a.id && a.id.toLowerCase().includes(q));
             if (!matchesSearch) return false;
         }
 
         // Claimed status filter
-        if (filterClaimedStatus === "claimed" && !a.claimed_status) return false;
-        if (filterClaimedStatus === "unclaimed" && a.claimed_status) return false;
+        // If claimed_status is null/undefined, it defaults to unclaimed
+        const isClaimed = a.claimed_status === 'Claimed';
+        if (filterClaimedStatus === "claimed" && !isClaimed) return false;
+        if (filterClaimedStatus === "unclaimed" && isClaimed) return false;
 
-        // Role filter
-        if (filterRole !== "all" && a.role !== filterRole) return false;
+        // Role filter - case insensitive to match 'Attendee', 'Speaker', 'VIP' to lowercase states
+        if (filterRole !== "all") {
+            const role = (a.role || "attendee").toLowerCase();
+            if (role !== filterRole) return false;
+        }
 
         return true;
     });
+
+    const updateAttendeeLocal = useCallback((id: string, newRole: Attendee["role"]) => {
+        setAttendees(prev => prev.map(a => a.id === id ? { ...a, role: newRole } : a));
+    }, []);
 
     return {
         attendees: filteredAttendees,
@@ -106,5 +115,6 @@ export function useAttendees(eventId: string | null) {
         filterClaimedStatus,
         setFilterClaimedStatus,
         refetch: fetchAttendees,
+        updateAttendeeLocal,
     };
 }

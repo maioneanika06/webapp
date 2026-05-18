@@ -2,7 +2,7 @@
 
 import InventoryPanel from "@/components/InventoryPanel";
 import { useInventory } from "@/hooks/useInventory";
-import { useActiveEventContext } from "../layout";
+import { useActiveEventContext } from "../../layout";
 
 export default function InventoryPage() {
     const { activeEvent } = useActiveEventContext();
@@ -33,6 +33,7 @@ export default function InventoryPage() {
                     slots={slots}
                     loading={loading}
                     onUpdateSlot={updateSlot}
+                    isReadOnly={activeEvent.status !== "ACTIVE"}
                 />
             )}
         </div>

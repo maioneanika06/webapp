@@ -6,7 +6,8 @@ export interface Event {
   id: string;
   name: string;
   event_date: string;
-  is_active: boolean;
+  organizer_email: string;
+  status: string;
   created_at: string;
 }
 
@@ -19,8 +20,7 @@ export interface Attendee {
   company: string;
   role: 'attendee' | 'vip' | 'speaker';
   face_encoding: unknown | null;
-  qr_code_value: string;
-  claimed_status: boolean;
+  claimed_status: string | null;
   created_at: string;
 }
 

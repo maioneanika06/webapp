@@ -3,7 +3,7 @@
 import UsersTable from "@/components/UsersTable";
 import UnassignedAttendeesAlert from "@/components/UnassignedAttendeesAlert";
 import { useAttendees } from "@/hooks/useAttendees";
-import { useActiveEventContext } from "../layout";
+import { useActiveEventContext } from "../../layout";
 
 export default function UsersPage() {
     const { activeEvent } = useActiveEventContext();
@@ -18,6 +18,7 @@ export default function UsersPage() {
         filterClaimedStatus,
         setFilterClaimedStatus,
         refetch,
+        updateAttendeeLocal,
     } = useAttendees(activeEvent?.id ?? null);
 
     return (
@@ -66,6 +67,8 @@ export default function UsersPage() {
                         onFilterRoleChange={setFilterRole}
                         filterClaimedStatus={filterClaimedStatus}
                         onFilterClaimedChange={setFilterClaimedStatus}
+                        onRoleUpdated={updateAttendeeLocal}
+                        isReadOnly={activeEvent?.status !== "ACTIVE"}
                     />
                 </>
             )}

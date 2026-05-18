@@ -1,50 +1,62 @@
 "use client";
 
-import EventSelector from "@/components/EventSelector";
+import { useEffect } from "react";
+import EventGrid from "@/components/EventGrid";
 import { useActiveEventContext } from "./layout";
-import { useAttendees } from "@/hooks/useAttendees";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
-export default function DashboardOverview() {
-    const { activeEvent, events, loading, createEvent, endEvent } = useActiveEventContext();
-    const { totalCount, attendees, loading: attendeesLoading } = useAttendees(activeEvent?.id ?? null);
+export default function GlobalDashboard() {
+    const { user, loading: authLoading } = useAuth();
+    const isSuperAdmin = user?.email === "vendy.system@gmail.com";
+    
+    const { activeEvent, events, loading: eventsLoading, setActiveEvent } = useActiveEventContext();
 
-    const claimedCount = attendees.filter((a) => a.claimed_status).length;
+    // Clear the activeEvent when visiting the global dashboard 
+    useEffect(() => {
+        if (activeEvent) {
+            setActiveEvent(null);
+        }
+    }, [activeEvent, setActiveEvent]);
 
+    if (authLoading || eventsLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="w-10 h-10 border-3 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
+            </div>
+        );
+    }
+
+    if (isSuperAdmin) {
+        const activeEvents = events.filter(e => e.status === "ACTIVE");
+
+        return (
+            <div className="max-w-6xl mx-auto space-y-8">
+                <div>
+                    <h2 className="text-2xl font-bold text-white">Active Events</h2>
+                    <p className="text-white/40 text-sm mt-1">Manage ongoing vending machine events</p>
+                </div>
+
+                <EventGrid 
+                    events={activeEvents} 
+                    emptyMessage="No active events found. Create a new event to get started." 
+                />
+            </div>
+        );
+    }
+
+    // For Staff, show all their assigned events
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
-            {/* Page Header */}
+        <div className="max-w-6xl mx-auto space-y-8">
             <div>
-                <h2 className="text-2xl font-bold text-white">Event Overview</h2>
-                <p className="text-white/40 text-sm mt-1">Manage events and view key metrics</p>
+                <h2 className="text-2xl font-bold text-white">My Events</h2>
+                <p className="text-white/40 text-sm mt-1">Select an event to view its dashboard</p>
             </div>
 
-            {/* Event Selector / Manager */}
-            <EventSelector
-                activeEvent={activeEvent}
-                events={events}
-                loading={loading}
-                onCreateEvent={createEvent}
-                onEndEvent={endEvent}
+            <EventGrid 
+                events={events} 
+                emptyMessage="You have no events assigned to your email." 
             />
-
-            {/* Stats Grid - only show when active event exists */}
-            {activeEvent && !attendeesLoading && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="backdrop-blur-xl bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-                        <p className="text-white/40 text-xs uppercase tracking-wider font-medium">Total Attendees</p>
-                        <p className="text-3xl font-bold text-white mt-1">{totalCount}</p>
-                    </div>
-                    <div className="backdrop-blur-xl bg-white/[0.02] border border-green-500/10 rounded-2xl p-5">
-                        <p className="text-white/40 text-xs uppercase tracking-wider font-medium">Kits Claimed</p>
-                        <p className="text-3xl font-bold text-green-400 mt-1">{claimedCount}</p>
-                        <p className="text-white/20 text-xs mt-1">{totalCount > 0 ? Math.round((claimedCount / totalCount) * 100) : 0}% claimed</p>
-                    </div>
-                    <div className="backdrop-blur-xl bg-white/[0.02] border border-purple-500/10 rounded-2xl p-5">
-                        <p className="text-white/40 text-xs uppercase tracking-wider font-medium">Unclaimed</p>
-                        <p className="text-3xl font-bold text-purple-300 mt-1">{totalCount - claimedCount}</p>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

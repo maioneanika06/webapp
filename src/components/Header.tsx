@@ -14,7 +14,7 @@ export default function Header({ activeEvent }: HeaderProps) {
         <header className="h-16 bg-gray-950/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-8">
             {/* Active Event Indicator */}
             <div className="flex items-center gap-3">
-                {activeEvent ? (
+                {activeEvent && (
                     <>
                         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-lg shadow-green-400/50" />
                         <div>
@@ -27,11 +27,6 @@ export default function Header({ activeEvent }: HeaderProps) {
                                 })}
                             </p>
                         </div>
-                    </>
-                ) : (
-                    <>
-                        <div className="w-2 h-2 rounded-full bg-amber-400/60" />
-                        <p className="text-amber-300/60 text-sm">No active event</p>
                     </>
                 )}
             </div>

@@ -6,9 +6,10 @@ import type { InventorySlot } from "@/types";
 interface SlotCardProps {
     slot: InventorySlot;
     onUpdate: (slotId: string, updates: Partial<Pick<InventorySlot, "assigned_role" | "stock_count" | "low_stock_threshold">>) => Promise<void>;
+    isReadOnly?: boolean;
 }
 
-export default function SlotCard({ slot, onUpdate }: SlotCardProps) {
+export default function SlotCard({ slot, onUpdate, isReadOnly = false }: SlotCardProps) {
     const [editing, setEditing] = useState(false);
     const [role, setRole] = useState(slot.assigned_role);
     const [stock, setStock] = useState(slot.stock_count);
@@ -66,7 +67,7 @@ export default function SlotCard({ slot, onUpdate }: SlotCardProps) {
                         )}
                     </div>
                 </div>
-                {!editing && (
+                {!editing && !isReadOnly && (
                     <button
                         onClick={() => setEditing(true)}
                         className="p-2 text-white/20 hover:text-white/60 hover:bg-white/[0.05] rounded-lg transition-all cursor-pointer"
@@ -136,7 +137,7 @@ export default function SlotCard({ slot, onUpdate }: SlotCardProps) {
                     <div className="mt-3 space-y-3">
                         <div className="flex items-center justify-between">
                             <span className="text-white/40 text-xs">Stock Count</span>
-                            <span className={`text-2xl font-bold ${isOutOfStock ? "text-red-400" : isLowStock ? "text-amber-400" : "text-white"}`}>
+                            <span className={`text-2xl font-bold ${isOutOfStock || (slot.stock_count <= 5 && slot.stock_count > 0) ? "text-red-400" : isLowStock ? "text-amber-400" : "text-white"}`}>
                                 {slot.stock_count}
                             </span>
                         </div>
@@ -144,13 +145,13 @@ export default function SlotCard({ slot, onUpdate }: SlotCardProps) {
                         {/* Stock progress bar */}
                         <div className="w-full h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
                             <div
-                                className={`h-full rounded-full transition-all duration-500 ${isOutOfStock
-                                        ? "bg-red-500 w-0"
+                                className={`h-full rounded-full transition-all duration-500 ${isOutOfStock || (slot.stock_count <= 5 && slot.stock_count > 0)
+                                        ? "bg-red-500"
                                         : isLowStock
                                             ? "bg-gradient-to-r from-amber-500 to-amber-400"
                                             : "bg-gradient-to-r from-green-500 to-emerald-400"
                                     }`}
-                                style={{ width: `${Math.min(100, (slot.stock_count / Math.max(slot.low_stock_threshold * 3, 1)) * 100)}%` }}
+                                style={{ width: `${Math.min(100, (slot.stock_count / Math.max(slot.low_stock_threshold * 3, 10)) * 100)}%` }}
                             />
                         </div>
 
@@ -163,7 +164,15 @@ export default function SlotCard({ slot, onUpdate }: SlotCardProps) {
                                 <span className="text-red-300 text-xs font-medium">Out of Stock</span>
                             </div>
                         )}
-                        {isLowStock && (
+                        {slot.stock_count <= 5 && slot.stock_count > 0 && (
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20">
+                                <svg className="w-4 h-4 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                                </svg>
+                                <span className="text-red-300 text-xs font-medium">Critical Stock (≤5)</span>
+                            </div>
+                        )}
+                        {isLowStock && slot.stock_count > 5 && (
                             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
                                 <svg className="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />

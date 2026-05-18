@@ -14,6 +14,8 @@ interface UsersTableProps {
     onFilterRoleChange: (v: "all" | "attendee" | "vip" | "speaker") => void;
     filterClaimedStatus: "all" | "claimed" | "unclaimed";
     onFilterClaimedChange: (v: "all" | "claimed" | "unclaimed") => void;
+    onRoleUpdated?: (id: string, role: Attendee["role"]) => void;
+    isReadOnly?: boolean;
 }
 
 export default function UsersTable({
@@ -26,6 +28,8 @@ export default function UsersTable({
     onFilterRoleChange,
     filterClaimedStatus,
     onFilterClaimedChange,
+    onRoleUpdated,
+    isReadOnly = false,
 }: UsersTableProps) {
     const [roleStatus, setRoleStatus] = useState<Record<string, "loading" | "success" | null>>({});
 
@@ -35,6 +39,7 @@ export default function UsersTable({
 
         if (!error) {
             setRoleStatus((prev) => ({ ...prev, [attendeeId]: "success" }));
+            if (onRoleUpdated) onRoleUpdated(attendeeId, newRole);
             setTimeout(() => {
                 setRoleStatus((prev) => ({ ...prev, [attendeeId]: null }));
             }, 2500);
@@ -43,6 +48,32 @@ export default function UsersTable({
             setRoleStatus((prev) => ({ ...prev, [attendeeId]: null }));
         }
     };
+
+    const exportToCSV = () => {
+        if (attendees.length === 0) return;
+        
+        const headers = ["Full Name", "Email", "Company", "Role", "Claimed Status"];
+        const rows = attendees.map(a => [
+            `"${(a.full_name || '').replace(/"/g, '""')}"`,
+            `"${(a.email || '').replace(/"/g, '""')}"`,
+            `"${(a.company || '').replace(/"/g, '""')}"`,
+            `"${(a.role || 'Attendee').replace(/"/g, '""')}"`,
+            a.claimed_status === 'Claimed' ? "Claimed" : "Unclaimed"
+        ]);
+        
+        const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `attendees_export_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     if (loading) {
         return (
             <div className="backdrop-blur-xl bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12">
@@ -112,8 +143,20 @@ export default function UsersTable({
                         <option value="unclaimed">Unclaimed</option>
                     </select>
 
+                    {/* Export */}
+                    <button
+                        onClick={exportToCSV}
+                        disabled={attendees.length === 0}
+                        className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] rounded-xl text-white/80 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ml-auto"
+                    >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Export CSV
+                    </button>
+
                     {/* Count */}
-                    <span className="text-white/30 text-xs ml-auto">
+                    <span className="text-white/30 text-xs pl-2">
                         {attendees.length} of {totalCount} attendees
                     </span>
                 </div>
@@ -162,9 +205,9 @@ export default function UsersTable({
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <select
-                                                    value={attendee.role || "attendee"}
+                                                    value={(attendee.role || "attendee").toLowerCase()}
                                                     onChange={(e) => handleRoleChange(attendee.id, e.target.value as any)}
-                                                    disabled={roleStatus[attendee.id] === "loading"}
+                                                    disabled={isReadOnly || roleStatus[attendee.id] === "loading"}
                                                     className="pl-3 pr-8 py-1.5 bg-white/[0.03] border border-white/[0.08] rounded-lg text-white/80 text-xs font-medium focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 cursor-pointer appearance-none [color-scheme:dark] transition-all disabled:opacity-50"
                                                     style={{ backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.5rem center', backgroundSize: '1em' }}
                                                 >
@@ -183,7 +226,7 @@ export default function UsersTable({
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-center">
-                                            {attendee.claimed_status ? (
+                                            {attendee.claimed_status === 'Claimed' ? (
                                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
                                                     Claimed

@@ -9,15 +9,17 @@ import type { Event } from "@/types";
 
 interface ActiveEventContextType {
     activeEvent: Event | null;
+    setActiveEvent: (event: Event | null) => void;
     events: Event[];
     loading: boolean;
-    createEvent: (name: string, date: string) => Promise<unknown>;
+    createEvent: (name: string, date: string, organizerEmail: string) => Promise<unknown>;
     endEvent: (eventId: string) => Promise<void>;
     refetch: () => Promise<void>;
 }
 
 const ActiveEventContext = createContext<ActiveEventContextType>({
     activeEvent: null,
+    setActiveEvent: () => { },
     events: [],
     loading: true,
     createEvent: async () => { },
