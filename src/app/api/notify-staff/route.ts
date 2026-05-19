@@ -20,8 +20,8 @@ export async function POST(req: Request) {
             },
         });
 
-        const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL || "http://localhost:3000";
-        const registrationUrl = process.env.NEXT_PUBLIC_REGISTRATION_URL || "http://localhost:3001";
+        const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL || "http://vendywebapp.vercel.app";
+        const registrationUrl = process.env.NEXT_PUBLIC_REGISTRATION_URL || "http://vendyregistrationform.vercel.app";
 
         const mailOptions = {
             from: process.env.GMAIL_USER,
