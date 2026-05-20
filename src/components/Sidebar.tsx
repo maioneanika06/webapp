@@ -3,12 +3,26 @@
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { useState, createContext, useContext } from "react";
+
+// Sidebar context so layout can read collapsed state
+interface SidebarContextType {
+    collapsed: boolean;
+    setCollapsed: (v: boolean) => void;
+}
+const SidebarContext = createContext<SidebarContextType>({
+    collapsed: false,
+    setCollapsed: () => {},
+});
+export const useSidebarContext = () => useContext(SidebarContext);
+export { SidebarContext };
 
 export default function Sidebar() {
     const pathname = usePathname();
     const params = useParams();
-    const { user } = useAuth();
-    
+    const { user, signOut } = useAuth();
+    const [collapsed, setCollapsed] = useState(false);
+
     const isSuperAdmin = user?.email === "vendy.system@gmail.com";
     const isEventView = !!params.eventId;
     const eventId = params.eventId as string;
@@ -18,25 +32,25 @@ export default function Sidebar() {
             href: "/dashboard",
             label: "Active Events",
             icon: (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
                 </svg>
             ),
         },
         {
             href: "/dashboard/completed",
-            label: "Completed Events",
+            label: "Completed",
             icon: (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             ),
         },
         {
             href: "/dashboard/create",
-            label: "Create New Event",
+            label: "Create Event",
             icon: (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             ),
@@ -48,7 +62,7 @@ export default function Sidebar() {
             href: `/dashboard/${eventId}`,
             label: "Overview",
             icon: (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
                 </svg>
@@ -58,7 +72,7 @@ export default function Sidebar() {
             href: `/dashboard/${eventId}/users`,
             label: "Users",
             icon: (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                 </svg>
             ),
@@ -67,7 +81,7 @@ export default function Sidebar() {
             href: `/dashboard/${eventId}/inventory`,
             label: "Inventory",
             icon: (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                 </svg>
             ),
@@ -79,7 +93,7 @@ export default function Sidebar() {
             href: "/dashboard",
             label: "My Events",
             icon: (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
                 </svg>
             ),
@@ -93,66 +107,166 @@ export default function Sidebar() {
         activeNavItems = isSuperAdmin ? globalNavItems : staffGlobalNavItems;
     }
 
-    return (
-        <aside className="w-64 min-h-screen bg-gray-950 border-r border-white/[0.06] flex flex-col">
-            {/* Logo */}
-            <div className="p-6 border-b border-white/[0.06]">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden">
-                        <img src="/VENDY.png" alt="Vendy Logo" className="w-full h-full object-cover" />
-                    </div>
-                    <div>
-                        <h1 className="text-white font-bold text-lg leading-tight">VENDY</h1>
-                        <p className="text-white/30 text-xs">{isSuperAdmin ? "Super Admin" : "Event Dashboard"}</p>
-                    </div>
-                </div>
-            </div>
+    const sectionLabel = isEventView
+        ? "Event"
+        : isSuperAdmin
+            ? "Management"
+            : "Dashboard";
 
-            {/* Navigation */}
-            <nav className="flex-1 p-4 space-y-1">
-                {isEventView && (
-                    <div className="mb-6 pb-6 border-b border-white/[0.06]">
-                        <Link
-                            href="/dashboard"
-                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] hover:border-white/[0.2] transition-all duration-200"
-                        >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                            </svg>
-                            Back to {isSuperAdmin ? "Global View" : "My Events"}
-                        </Link>
+    return (
+        <aside
+            className={`${collapsed ? "w-[72px]" : "w-[260px]"} min-h-screen flex flex-col sidebar-transition relative`}
+            style={{
+                background: "linear-gradient(180deg, #0d0d12 0%, #0a0a0e 100%)",
+            }}
+        >
+            {/* Soft right edge — gradient fade instead of border */}
+            <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-white/[0.03] via-white/[0.06] to-white/[0.02]" />
+
+            {/* ── Brand ─────────────────────────────── */}
+            <div className={`${collapsed ? "px-4 py-5" : "px-5 py-5"} flex items-center gap-3 transition-all duration-300`}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-purple-500/10 shadow-lg shadow-purple-500/5">
+                    <img src="/VENDY.png" alt="Vendy Logo" className="w-full h-full object-cover" />
+                </div>
+                {!collapsed && (
+                    <div className="sidebar-content-fade min-w-0">
+                        <h1 className="text-white font-semibold text-[15px] leading-tight tracking-tight">VENDY</h1>
+                        <p className="text-purple-300/30 text-[10px] tracking-wider uppercase mt-0.5">
+                            {isSuperAdmin ? "Super Admin" : "Staff"}
+                        </p>
                     </div>
                 )}
-                
-                {activeNavItems.map((item) => {
-                    let isActive = false;
-                    if (!isEventView) {
-                        isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/dashboard/active");
-                    } else {
-                        isActive = pathname === item.href || (item.href !== `/dashboard/${eventId}` && pathname.startsWith(item.href));
-                    }
+            </div>
 
-                    return (
+            {/* ── Collapse toggle — inside sidebar, not floating on the edge ── */}
+            <div className={`${collapsed ? "px-3" : "px-4"} mb-1 transition-all duration-300`}>
+                <button
+                    onClick={() => setCollapsed(!collapsed)}
+                    className={`w-full flex items-center ${collapsed ? "justify-center" : "justify-between"} gap-2 px-2.5 py-2 rounded-lg text-[11px] font-medium text-white/20 hover:text-white/40 hover:bg-white/[0.03] transition-all duration-200 cursor-pointer group`}
+                    title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                >
+                    {!collapsed && (
+                        <span className="sidebar-content-fade uppercase tracking-widest text-white/15">Menu</span>
+                    )}
+                    <svg
+                        className={`w-3.5 h-3.5 transition-transform duration-300 text-white/20 group-hover:text-white/40 ${collapsed ? "rotate-180" : ""}`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+            </div>
+
+            {/* ── Divider ─────────────────────────────── */}
+            <div className={`${collapsed ? "mx-3" : "mx-4"} h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent mb-2`} />
+
+            {/* ── Navigation ─────────────────────────── */}
+            <nav className={`flex-1 ${collapsed ? "px-3 py-2" : "px-4 py-2"} transition-all duration-300`}>
+                {/* Back button for event view */}
+                {isEventView && (
+                    <div className="mb-3 pb-3">
                         <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
-                                    ? "bg-purple-500/10 text-purple-300 border border-purple-500/20 shadow-lg shadow-purple-500/5"
-                                    : "text-white/50 hover:text-white/80 hover:bg-white/[0.03] border border-transparent"
-                                }`}
+                            href="/dashboard"
+                            className={`flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 px-3 py-2 rounded-lg text-[12px] font-medium text-white/30 hover:text-white/60 hover:bg-white/[0.03] transition-all duration-200`}
+                            title={collapsed ? `Back to ${isSuperAdmin ? "Global View" : "My Events"}` : ""}
                         >
-                            <span className={`transition-colors ${isActive ? "text-purple-400" : "text-white/30 group-hover:text-white/60"}`}>
-                                {item.icon}
-                            </span>
-                            {item.label}
+                            <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                            </svg>
+                            {!collapsed && (
+                                <span className="sidebar-content-fade">
+                                    Back to {isSuperAdmin ? "Global" : "Events"}
+                                </span>
+                            )}
                         </Link>
-                    );
-                })}
+                        <div className="mt-3 h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
+                    </div>
+                )}
+
+                {/* Section label */}
+                {!collapsed && (
+                    <p className="px-3 mb-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/15 sidebar-content-fade">
+                        {sectionLabel}
+                    </p>
+                )}
+
+                {/* Nav items */}
+                <div className="space-y-0.5">
+                    {activeNavItems.map((item) => {
+                        let isActive = false;
+                        if (!isEventView) {
+                            isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/dashboard/active");
+                        } else {
+                            isActive = pathname === item.href || (item.href !== `/dashboard/${eventId}` && pathname.startsWith(item.href));
+                        }
+
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`flex items-center ${collapsed ? "justify-center" : ""} gap-3 ${collapsed ? "px-0 py-3" : "px-3 py-2.5"} rounded-lg text-[13px] font-medium transition-all duration-200 group relative ${isActive
+                                    ? "text-purple-200 bg-purple-500/[0.07]"
+                                    : "text-white/30 hover:text-white/55 hover:bg-white/[0.025]"
+                                    }`}
+                                title={collapsed ? item.label : ""}
+                            >
+                                {/* Active indicator bar */}
+                                {isActive && (
+                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
+                                )}
+
+                                <span className={`transition-colors duration-200 ${isActive ? "text-purple-300" : "text-white/20 group-hover:text-white/40"}`}>
+                                    {item.icon}
+                                </span>
+                                {!collapsed && (
+                                    <span className="sidebar-content-fade">{item.label}</span>
+                                )}
+                            </Link>
+                        );
+                    })}
+                </div>
             </nav>
 
-            {/* Footer */}
-            <div className="p-4 border-t border-white/[0.06]">
-                <p className="text-white/20 text-xs text-center">Vending Machine System</p>
+            {/* ── Footer / Sign Out ──────────────────── */}
+            <div className={`${collapsed ? "px-3" : "px-4"} pb-5 space-y-2 transition-all duration-300`}>
+                {/* Divider */}
+                <div className="h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent mb-1" />
+
+                {/* User info */}
+                {!collapsed && user && (
+                    <div className="px-3 py-2.5 rounded-lg bg-white/[0.015] sidebar-content-fade">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/10 flex items-center justify-center shrink-0">
+                                <span className="text-purple-300/70 text-[10px] font-bold uppercase">
+                                    {user.email?.[0] || "U"}
+                                </span>
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-white/40 text-[11px] truncate">{user.email}</p>
+                                <p className="text-white/15 text-[9px] uppercase tracking-wider">
+                                    {isSuperAdmin ? "Admin" : "Staff"}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Sign out button */}
+                <button
+                    onClick={signOut}
+                    className={`w-full flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 ${collapsed ? "px-0 py-2.5" : "px-3 py-2"} rounded-lg text-[12px] font-medium text-white/20 hover:text-red-300/70 hover:bg-red-500/[0.04] transition-all duration-200 cursor-pointer group`}
+                    title={collapsed ? "Sign Out" : ""}
+                >
+                    <svg className="w-[15px] h-[15px] shrink-0 text-white/15 group-hover:text-red-400/50 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
+                    {!collapsed && (
+                        <span className="sidebar-content-fade">Sign Out</span>
+                    )}
+                </button>
             </div>
         </aside>
     );

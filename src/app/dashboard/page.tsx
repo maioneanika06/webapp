@@ -22,7 +22,7 @@ export default function GlobalDashboard() {
     if (authLoading || eventsLoading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="w-10 h-10 border-3 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-purple-500/15 border-t-purple-400 rounded-full animate-spin" />
             </div>
         );
     }
@@ -31,10 +31,10 @@ export default function GlobalDashboard() {
         const activeEvents = events.filter(e => e.status === "ACTIVE");
 
         return (
-            <div className="max-w-6xl mx-auto space-y-8">
+            <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
                 <div>
-                    <h2 className="text-2xl font-bold text-white">Active Events</h2>
-                    <p className="text-white/40 text-sm mt-1">Manage ongoing vending machine events</p>
+                    <h2 className="text-xl font-semibold text-white/90 tracking-tight">Active Events</h2>
+                    <p className="text-white/25 text-[13px] mt-1">Manage ongoing vending machine events</p>
                 </div>
 
                 <EventGrid 
@@ -47,10 +47,10 @@ export default function GlobalDashboard() {
 
     // For Staff, show all their assigned events
     return (
-        <div className="max-w-6xl mx-auto space-y-8">
+        <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
             <div>
-                <h2 className="text-2xl font-bold text-white">My Events</h2>
-                <p className="text-white/40 text-sm mt-1">Select an event to view its dashboard</p>
+                <h2 className="text-xl font-semibold text-white/90 tracking-tight">My Events</h2>
+                <p className="text-white/25 text-[13px] mt-1">Select an event to view its dashboard</p>
             </div>
 
             <EventGrid 

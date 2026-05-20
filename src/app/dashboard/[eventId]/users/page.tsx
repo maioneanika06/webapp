@@ -35,8 +35,17 @@ export default function UsersPage() {
                 </div>
                 {activeEvent && (
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-green-400/60 text-xs font-medium">Live Updates</span>
+                        {activeEvent.status === "ACTIVE" ? (
+                            <>
+                                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                <span className="text-green-400/60 text-xs font-medium">Live Updates</span>
+                            </>
+                        ) : (
+                            <>
+                                <div className="w-2 h-2 rounded-full bg-zinc-500" />
+                                <span className="text-zinc-400/60 text-xs font-medium">Read Only</span>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
