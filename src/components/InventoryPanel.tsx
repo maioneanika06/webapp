@@ -23,7 +23,7 @@ export default function InventoryPanel({ slots, loading, onUpdateSlot, isReadOnl
     }
 
     const totalStock = slots.reduce((acc, s) => acc + s.stock_count, 0);
-    const lowStockCount = slots.filter((s) => s.stock_count > 0 && s.stock_count <= s.low_stock_threshold).length;
+    const lowStockCount = slots.filter((s) => s.stock_count > 0 && s.stock_count <= 2).length;
     const outOfStockCount = slots.filter((s) => s.stock_count === 0).length;
 
     return (

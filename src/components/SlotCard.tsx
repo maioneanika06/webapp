@@ -137,7 +137,7 @@ export default function SlotCard({ slot, onUpdate, isReadOnly = false }: SlotCar
                     <div className="mt-3 space-y-3">
                         <div className="flex items-center justify-between">
                             <span className="text-white/40 text-xs">Stock Count</span>
-                            <span className={`text-2xl font-bold ${isOutOfStock || (slot.stock_count <= 5 && slot.stock_count > 0) ? "text-red-400" : isLowStock ? "text-amber-400" : "text-white"}`}>
+                            <span className={`text-2xl font-bold ${isOutOfStock || (slot.stock_count <= 2 && slot.stock_count > 0) ? "text-red-400" : isLowStock ? "text-amber-400" : "text-white"}`}>
                                 {slot.stock_count}
                             </span>
                         </div>
@@ -145,7 +145,7 @@ export default function SlotCard({ slot, onUpdate, isReadOnly = false }: SlotCar
                         {/* Stock progress bar */}
                         <div className="w-full h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
                             <div
-                                className={`h-full rounded-full transition-all duration-500 ${isOutOfStock || (slot.stock_count <= 5 && slot.stock_count > 0)
+                                className={`h-full rounded-full transition-all duration-500 ${isOutOfStock || (slot.stock_count <= 2 && slot.stock_count > 0)
                                         ? "bg-red-500"
                                         : isLowStock
                                             ? "bg-gradient-to-r from-amber-500 to-amber-400"
@@ -164,15 +164,15 @@ export default function SlotCard({ slot, onUpdate, isReadOnly = false }: SlotCar
                                 <span className="text-red-300 text-xs font-medium">Out of Stock</span>
                             </div>
                         )}
-                        {slot.stock_count <= 5 && slot.stock_count > 0 && (
+                        {slot.stock_count <= 2 && slot.stock_count > 0 && (
                             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20">
                                 <svg className="w-4 h-4 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                                 </svg>
-                                <span className="text-red-300 text-xs font-medium">Critical Stock (≤5)</span>
+                                <span className="text-red-300 text-xs font-medium">Critical Stock (≤2)</span>
                             </div>
                         )}
-                        {isLowStock && slot.stock_count > 5 && (
+                        {isLowStock && slot.stock_count > 2 && (
                             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
                                 <svg className="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
