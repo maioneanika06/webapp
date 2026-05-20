@@ -1,18 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function LoginPage() {
-    const { user, loading, signIn, signInWithGoogle } = useAuth();
+    const { user, loading, signInWithGoogle } = useAuth();
     const router = useRouter();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [submitting, setSubmitting] = useState(false);
-    const [showEmailForm, setShowEmailForm] = useState(false);
 
     useEffect(() => {
         if (!loading && user) {
@@ -26,21 +21,6 @@ export default function LoginPage() {
             await signInWithGoogle();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Google sign-in failed");
-        }
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError("");
-        setSubmitting(true);
-
-        try {
-            await signIn(email, password);
-            router.replace("/dashboard");
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Login failed");
-        } finally {
-            setSubmitting(false);
         }
     };
 
@@ -92,64 +72,6 @@ export default function LoginPage() {
                         </svg>
                         Sign in with Google
                     </button>
-
-                    {/* Divider */}
-                    <div className="flex items-center gap-4 my-6">
-                        <div className="flex-1 h-px bg-white/[0.08]" />
-                        <span className="text-white/20 text-xs uppercase tracking-wider">or</span>
-                        <div className="flex-1 h-px bg-white/[0.08]" />
-                    </div>
-
-                    {/* Email/Password toggle */}
-                    {!showEmailForm ? (
-                        <button
-                            onClick={() => setShowEmailForm(true)}
-                            className="w-full py-3 text-sm font-medium text-white/40 hover:text-white/60 bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/[0.1] rounded-xl transition-all duration-200 cursor-pointer"
-                        >
-                            Sign in with Email & Password
-                        </button>
-                    ) : (
-                        <form onSubmit={handleSubmit} className="space-y-4 animate-fadeIn">
-                            <div>
-                                <label className="block text-white/40 text-xs font-medium mb-2 uppercase tracking-wider">Email</label>
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    placeholder="admin@example.com"
-                                    className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 transition-all"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-white/40 text-xs font-medium mb-2 uppercase tracking-wider">Password</label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    placeholder="••••••••"
-                                    className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 transition-all"
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={submitting}
-                                className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl transition-all duration-200 disabled:opacity-50 shadow-lg shadow-purple-500/20 cursor-pointer"
-                            >
-                                {submitting ? (
-                                    <span className="flex items-center justify-center gap-2">
-                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        Signing in...
-                                    </span>
-                                ) : (
-                                    "Sign In"
-                                )}
-                            </button>
-                        </form>
-                    )}
                 </div>
 
                 <p className="text-center text-white/15 text-xs mt-6">
