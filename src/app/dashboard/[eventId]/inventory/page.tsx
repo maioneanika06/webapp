@@ -6,7 +6,7 @@ import { useActiveEventContext } from "../../layout";
 
 export default function InventoryPage() {
     const { activeEvent } = useActiveEventContext();
-    const { slots, loading, updateSlot } = useInventory(activeEvent?.id ?? null);
+    const { slots, loading, updateSlot, restockSlot } = useInventory(activeEvent?.id ?? null);
 
     return (
         <div className="space-y-6">
@@ -33,6 +33,7 @@ export default function InventoryPage() {
                     slots={slots}
                     loading={loading}
                     onUpdateSlot={updateSlot}
+                    onRestockSlot={restockSlot}
                     isReadOnly={activeEvent.status !== "ACTIVE"}
                 />
             )}

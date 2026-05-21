@@ -43,6 +43,7 @@ export function useActiveEvent() {
     }, [user]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchEvents();
     }, [fetchEvents]);
 
@@ -67,8 +68,8 @@ export function useActiveEvent() {
                     event_id: data.id,
                     slot_number: i + 1,
                     assigned_role: "Attendee",
-                    stock_count: 0,
-                    low_stock_threshold: 5
+                    stock_count: 5,
+                    low_stock_threshold: 2
                 }));
 
                 const { error: inventoryError } = await supabase

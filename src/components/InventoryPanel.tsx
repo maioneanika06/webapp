@@ -6,11 +6,12 @@ import SlotCard from "./SlotCard";
 interface InventoryPanelProps {
     slots: InventorySlot[];
     loading: boolean;
-    onUpdateSlot: (slotId: string, updates: Partial<Pick<InventorySlot, "assigned_role" | "stock_count" | "low_stock_threshold">>) => Promise<void>;
+    onUpdateSlot: (slotId: string, updates: Partial<Pick<InventorySlot, "assigned_role">>) => Promise<void>;
+    onRestockSlot: (slotId: string) => Promise<void>;
     isReadOnly?: boolean;
 }
 
-export default function InventoryPanel({ slots, loading, onUpdateSlot, isReadOnly = false }: InventoryPanelProps) {
+export default function InventoryPanel({ slots, loading, onUpdateSlot, onRestockSlot, isReadOnly = false }: InventoryPanelProps) {
     if (loading) {
         return (
             <div className="backdrop-blur-xl bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12">
@@ -47,7 +48,13 @@ export default function InventoryPanel({ slots, loading, onUpdateSlot, isReadOnl
             {/* Slot Grid - Control Panel layout */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {slots.map((slot) => (
-                    <SlotCard key={slot.id} slot={slot} onUpdate={onUpdateSlot} isReadOnly={isReadOnly} />
+                    <SlotCard
+                        key={slot.id}
+                        slot={slot}
+                        onUpdate={onUpdateSlot}
+                        onRestock={onRestockSlot}
+                        isReadOnly={isReadOnly}
+                    />
                 ))}
             </div>
 

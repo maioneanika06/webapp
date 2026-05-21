@@ -34,6 +34,7 @@ export function useInventory(eventId: string | null) {
     }, [eventId]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchSlots();
     }, [fetchSlots]);
 
@@ -74,7 +75,7 @@ export function useInventory(eventId: string | null) {
     }, [eventId]);
 
     const updateSlot = useCallback(
-        async (slotId: string, updates: Partial<Pick<InventorySlot, "assigned_role" | "stock_count" | "low_stock_threshold">>) => {
+        async (slotId: string, updates: Partial<Pick<InventorySlot, "assigned_role">>) => {
             const { error } = await supabase
                 .from("inventory")
                 .update(updates)
@@ -87,5 +88,17 @@ export function useInventory(eventId: string | null) {
         []
     );
 
-    return { slots, loading, updateSlot, refetch: fetchSlots };
+    const restockSlot = useCallback(
+        async (slotId: string) => {
+            const { error } = await supabase
+                .from("inventory")
+                .update({ stock_count: 5, low_stock_threshold: 2 })
+                .eq("id", slotId);
+
+            if (error) throw error;
+        },
+        []
+    );
+
+    return { slots, loading, updateSlot, restockSlot, refetch: fetchSlots };
 }
