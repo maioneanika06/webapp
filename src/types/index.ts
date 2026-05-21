@@ -20,7 +20,7 @@ export interface Attendee {
   company: string;
   role: 'attendee' | 'vip' | 'speaker';
   face_encoding: unknown | null;
-  claimed_status: string | null;
+  claimed_status: 'QR Verified' | 'Face Verified' | 'Ready to Dispense' | 'Claimed' | string | null;
   created_at: string;
 }
 

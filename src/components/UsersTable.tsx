@@ -32,6 +32,44 @@ export default function UsersTable({
     isReadOnly = false,
 }: UsersTableProps) {
     const [roleStatus, setRoleStatus] = useState<Record<string, "loading" | "success" | null>>({});
+    const roleTabs: Array<{ id: UsersTableProps["filterRole"]; label: string }> = [
+        { id: "all", label: "All Users" },
+        { id: "vip", label: "VIP" },
+        { id: "speaker", label: "Speakers" },
+        { id: "attendee", label: "Attendees" },
+    ];
+
+    const getClaimBadge = (status: Attendee["claimed_status"]) => {
+        if (status === "Claimed") {
+            return {
+                label: "Claimed",
+                dot: "bg-green-400",
+                className: "bg-green-500/10 text-green-400 border-green-500/20",
+            };
+        }
+
+        if (status === "Ready to Dispense") {
+            return {
+                label: "Ready",
+                dot: "bg-sky-400",
+                className: "bg-sky-500/10 text-sky-300 border-sky-500/20",
+            };
+        }
+
+        if (status === "QR Verified" || status === "Face Verified") {
+            return {
+                label: status,
+                dot: "bg-amber-400",
+                className: "bg-amber-500/10 text-amber-300 border-amber-500/20",
+            };
+        }
+
+        return {
+            label: "Unclaimed",
+            dot: "bg-white/30",
+            className: "bg-white/[0.03] text-white/40 border-white/[0.06]",
+        };
+    };
 
     const handleRoleChange = async (attendeeId: string, newRole: "attendee" | "vip" | "speaker") => {
         setRoleStatus((prev) => ({ ...prev, [attendeeId]: "loading" }));
@@ -89,15 +127,10 @@ export default function UsersTable({
         <div className="space-y-4">
             {/* Role Tabs */}
             <div className="flex bg-white/[0.02] border border-white/[0.06] rounded-2xl p-1.5 w-max">
-                {[
-                    { id: "all", label: "All Users" },
-                    { id: "vip", label: "VIP" },
-                    { id: "speaker", label: "Speakers" },
-                    { id: "attendee", label: "Attendees" },
-                ].map((tab) => (
+                {roleTabs.map((tab) => (
                     <button
                         key={tab.id}
-                        onClick={() => onFilterRoleChange(tab.id as any)}
+                        onClick={() => onFilterRoleChange(tab.id)}
                         className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${
                             filterRole === tab.id
                                 ? "bg-purple-500/20 text-purple-300"
@@ -206,7 +239,7 @@ export default function UsersTable({
                                             <div className="flex items-center gap-2">
                                                 <select
                                                     value={(attendee.role || "attendee").toLowerCase()}
-                                                    onChange={(e) => handleRoleChange(attendee.id, e.target.value as any)}
+                                                    onChange={(e) => handleRoleChange(attendee.id, e.target.value as Attendee["role"])}
                                                     disabled={isReadOnly || roleStatus[attendee.id] === "loading"}
                                                     className="pl-3 pr-8 py-1.5 bg-white/[0.03] border border-white/[0.08] rounded-lg text-white/80 text-xs font-medium focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 cursor-pointer appearance-none [color-scheme:dark] transition-all disabled:opacity-50"
                                                     style={{ backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.5rem center', backgroundSize: '1em' }}
@@ -226,17 +259,15 @@ export default function UsersTable({
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-center">
-                                            {attendee.claimed_status === 'Claimed' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                                                    Claimed
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/[0.03] text-white/40 border border-white/[0.06]">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
-                                                    Unclaimed
-                                                </span>
-                                            )}
+                                            {(() => {
+                                                const badge = getClaimBadge(attendee.claimed_status);
+                                                return (
+                                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full border ${badge.className}`}>
+                                                        <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
+                                                        {badge.label}
+                                                    </span>
+                                                );
+                                            })()}
                                         </td>
                                     </tr>
                                 ))
