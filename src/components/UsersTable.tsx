@@ -240,8 +240,9 @@ export default function UsersTable({
                                                 <select
                                                     value={(attendee.role || "attendee").toLowerCase()}
                                                     onChange={(e) => handleRoleChange(attendee.id, e.target.value as Attendee["role"])}
-                                                    disabled={isReadOnly || roleStatus[attendee.id] === "loading"}
-                                                    className="pl-3 pr-8 py-1.5 bg-white/[0.03] border border-white/[0.08] rounded-lg text-white/80 text-xs font-medium focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 cursor-pointer appearance-none [color-scheme:dark] transition-all disabled:opacity-50"
+                                                    disabled={isReadOnly || attendee.claimed_status === "Claimed" || roleStatus[attendee.id] === "loading"}
+                                                    title={attendee.claimed_status === "Claimed" ? "Claimed attendees cannot change roles." : undefined}
+                                                    className="pl-3 pr-8 py-1.5 bg-white/[0.03] border border-white/[0.08] rounded-lg text-white/80 text-xs font-medium focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 cursor-pointer appearance-none [color-scheme:dark] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                                     style={{ backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.5rem center', backgroundSize: '1em' }}
                                                 >
                                                     <option value="attendee">Attendee</option>
