@@ -27,7 +27,8 @@ export default function Sidebar() {
     const isEventView = !!params.eventId;
     const eventId = params.eventId as string;
 
-    const globalNavItems = [
+    //admin side
+    const globalNavItems = [ 
         {
             href: "/dashboard",
             label: "Active Events",
@@ -56,6 +57,8 @@ export default function Sidebar() {
             ),
         }
     ];
+
+    //event admin only side
 
     const eventNavItems = [
         {
@@ -100,6 +103,7 @@ export default function Sidebar() {
         }
     ];
 
+    // show which nav items to show based on role and view
     let activeNavItems;
     if (isEventView) {
         activeNavItems = eventNavItems;
@@ -107,6 +111,7 @@ export default function Sidebar() {
         activeNavItems = isSuperAdmin ? globalNavItems : staffGlobalNavItems;
     }
 
+    
     const sectionLabel = isEventView
         ? "Event"
         : isSuperAdmin

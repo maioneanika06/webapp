@@ -36,6 +36,7 @@ export function useAttendees(eventId: string | null) {
     }, [eventId]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchAttendees();
     }, [fetchAttendees]);
 
@@ -91,7 +92,7 @@ export function useAttendees(eventId: string | null) {
         if (filterClaimedStatus === "claimed" && !isClaimed) return false;
         if (filterClaimedStatus === "unclaimed" && isClaimed) return false;
 
-        // Role filter - case insensitive to match 'Attendee', 'Speaker', 'VIP' to lowercase states
+        // Role filter uses the shared lowercase role values.
         if (filterRole !== "all") {
             const role = (a.role || "attendee").toLowerCase();
             if (role !== filterRole) return false;

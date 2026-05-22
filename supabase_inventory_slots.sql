@@ -2,15 +2,18 @@
 -- This keeps your current column names:
 -- assigned_role, stock_count, low_stock_threshold.
 
--- Normalize existing data first so constraints can be added safely.
+-- Normalize existing data first so inventory uses the same lowercase role
+-- values as attendees.role.
+alter table public.inventory
+    drop constraint if exists inventory_assigned_role_allowed;
+
 update public.inventory
 set stock_count = least(5, greatest(0, coalesce(stock_count, 5))),
     low_stock_threshold = 2,
     assigned_role = case
-        when assigned_role in ('VIP', 'Speaker', 'Attendee') then assigned_role
-        when lower(assigned_role) = 'vip' then 'VIP'
-        when lower(assigned_role) = 'speaker' then 'Speaker'
-        else 'Attendee'
+        when lower(assigned_role) = 'vip' then 'vip'
+        when lower(assigned_role) = 'speaker' then 'speaker'
+        else 'attendee'
     end;
 
 alter table public.inventory
@@ -43,16 +46,9 @@ begin
             check (slot_number between 1 and 6);
     end if;
 
-    if not exists (
-        select 1
-        from pg_constraint
-        where conname = 'inventory_assigned_role_allowed'
-          and conrelid = 'public.inventory'::regclass
-    ) then
-        alter table public.inventory
-            add constraint inventory_assigned_role_allowed
-            check (assigned_role in ('VIP', 'Speaker', 'Attendee'));
-    end if;
+    alter table public.inventory
+        add constraint inventory_assigned_role_allowed
+        check (assigned_role in ('vip', 'speaker', 'attendee'));
 
     if not exists (
         select 1

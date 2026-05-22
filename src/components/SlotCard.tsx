@@ -11,6 +11,11 @@ interface SlotCardProps {
 }
 
 const MAX_CAPACITY = 5;
+const ROLE_LABELS: Record<InventorySlot["assigned_role"], string> = {
+    attendee: "Attendee",
+    vip: "VIP",
+    speaker: "Speaker",
+};
 
 export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false }: SlotCardProps) {
     const [role, setRole] = useState(slot.assigned_role);
@@ -27,12 +32,12 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
     const stockPercent = (currentStock / MAX_CAPACITY) * 100;
 
     const roleColors: Record<string, { bg: string; text: string; border: string; glow: string }> = {
-        VIP: { bg: "bg-amber-500/10", text: "text-amber-300", border: "border-amber-500/20", glow: "shadow-amber-500/10" },
-        Speaker: { bg: "bg-sky-500/10", text: "text-sky-300", border: "border-sky-500/20", glow: "shadow-sky-500/10" },
-        Attendee: { bg: "bg-purple-500/10", text: "text-purple-300", border: "border-purple-500/20", glow: "shadow-purple-500/10" },
+        vip: { bg: "bg-amber-500/10", text: "text-amber-300", border: "border-amber-500/20", glow: "shadow-amber-500/10" },
+        speaker: { bg: "bg-sky-500/10", text: "text-sky-300", border: "border-sky-500/20", glow: "shadow-sky-500/10" },
+        attendee: { bg: "bg-purple-500/10", text: "text-purple-300", border: "border-purple-500/20", glow: "shadow-purple-500/10" },
     };
 
-    const colors = roleColors[slot.assigned_role] || roleColors.Attendee;
+    const colors = roleColors[slot.assigned_role] || roleColors.attendee;
     const statusLabel = isOutOfStock ? "Out of Stock" : isLowStock ? "Low Stock" : "In Stock";
     const statusClass = isOutOfStock
         ? "bg-red-500/10 text-red-300 border-red-500/20"
@@ -75,7 +80,7 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
                     <div>
                         <p className="text-white/40 text-xs uppercase tracking-wider">Slot {slot.slot_number}</p>
                         <span className={`inline-flex items-center px-2.5 py-0.5 text-xs font-semibold rounded-md ${colors.bg} ${colors.text} ${colors.border} border mt-0.5`}>
-                            {slot.assigned_role}
+                            {ROLE_LABELS[slot.assigned_role]}
                         </span>
                     </div>
                 </div>
@@ -95,9 +100,9 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
                             disabled={isReadOnly || savingRole}
                             className="flex-1 px-3 py-2 bg-white/[0.03] border border-white/[0.08] rounded-lg text-white text-sm focus:outline-none focus:border-purple-500/40 cursor-pointer [color-scheme:dark] disabled:opacity-50"
                         >
-                            <option value="VIP">VIP</option>
-                            <option value="Speaker">Speaker</option>
-                            <option value="Attendee">Attendee</option>
+                            <option value="vip">VIP</option>
+                            <option value="speaker">Speaker</option>
+                            <option value="attendee">Attendee</option>
                         </select>
                         <button
                             onClick={handleRoleSave}

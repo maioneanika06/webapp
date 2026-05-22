@@ -11,6 +11,8 @@ export interface Event {
   created_at: string;
 }
 
+export type Role = 'attendee' | 'vip' | 'speaker';
+
 export interface Attendee {
   id: string;
   event_id: string | null;
@@ -18,7 +20,7 @@ export interface Attendee {
   email: string;
   contact_number: string;
   company: string;
-  role: 'attendee' | 'vip' | 'speaker';
+  role: Role;
   face_encoding: unknown | null;
   claimed_status: 'QR Verified' | 'Face Verified' | 'Ready to Dispense' | 'Claimed' | string | null;
   created_at: string;
@@ -28,7 +30,7 @@ export interface InventorySlot {
   id: string;
   event_id: string;
   slot_number: number;
-  assigned_role: 'VIP' | 'Speaker' | 'Attendee';
+  assigned_role: Role;
   stock_count: number;
   low_stock_threshold: number;
   created_at: string;

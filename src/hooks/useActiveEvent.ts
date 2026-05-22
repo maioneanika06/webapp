@@ -67,7 +67,7 @@ export function useActiveEvent() {
                 const slots = Array.from({ length: 6 }, (_, i) => ({
                     event_id: data.id,
                     slot_number: i + 1,
-                    assigned_role: "Attendee",
+                    assigned_role: "attendee",
                     stock_count: 5,
                     low_stock_threshold: 2
                 }));

@@ -45,7 +45,7 @@ export default function GlobalDashboard() {
         );
     }
 
-    // For Staff, show all their assigned events
+    //for event staff, show all their assigned events
     return (
         <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
             <div>

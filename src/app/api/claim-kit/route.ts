@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { Attendee } from "@/types";
 
-type ClaimSignal = "qr" | "face" | "ir" | "breakbeam" | "ir_breakbeam";
+type ClaimSignal = "qr" | "face" | "ir";
 
 type ClaimKitBody = {
     attendeeId?: string;
@@ -13,8 +13,6 @@ type ClaimKitBody = {
     qrVerified?: boolean;
     faceVerified?: boolean;
     irBreakbeamTriggered?: boolean;
-    breakbeamTriggered?: boolean;
-    irTriggered?: boolean;
 };
 
 const claimedStatuses = new Set(["Claimed"]);
@@ -22,10 +20,6 @@ const qrStatuses = new Set(["QR Verified", "Ready to Dispense", "Claimed"]);
 const faceStatuses = new Set(["Face Verified", "Ready to Dispense", "Claimed"]);
 
 function hasSignal(body: ClaimKitBody, signal: "qr" | "face" | "ir") {
-    if (signal === "ir") {
-        return body.signal === "ir" || body.signal === "breakbeam" || body.signal === "ir_breakbeam";
-    }
-
     return body.signal === signal;
 }
 
@@ -45,13 +39,6 @@ function nextStatus(progress: { qr: boolean; face: boolean; ir: boolean }) {
     return null;
 }
 
-function roleToInventoryRole(role: Attendee["role"] | string | null | undefined) {
-    const normalized = (role || "attendee").toLowerCase();
-    if (normalized === "vip") return "VIP";
-    if (normalized === "speaker") return "Speaker";
-    return "Attendee";
-}
-
 export async function POST(request: NextRequest) {
     if (!supabaseAdmin) {
         return NextResponse.json(
@@ -59,8 +46,8 @@ export async function POST(request: NextRequest) {
             { status: 500 }
         );
     }
-
-    let body: ClaimKitBody;
+//holds the data sent sa api and icheck niya if valid json 
+    let body/*main data sent galing sa client*/: ClaimKitBody;
     try {
         body = await request.json();
     } catch {
@@ -109,8 +96,6 @@ export async function POST(request: NextRequest) {
     progress.ir =
         progress.ir ||
         body.irBreakbeamTriggered === true ||
-        body.breakbeamTriggered === true ||
-        body.irTriggered === true ||
         hasSignal(body, "ir");
 
     const status = nextStatus(progress);
@@ -148,7 +133,7 @@ export async function POST(request: NextRequest) {
     let inventoryWarning: string | undefined;
 
     if (status === "Claimed" && attendee.event_id) {
-        const assignedRole = roleToInventoryRole(attendee.role);
+        const assignedRole = attendee.role || "attendee";
         const { data: slot, error: slotError } = await supabaseAdmin
             .from("inventory")
             .select("id,stock_count")
