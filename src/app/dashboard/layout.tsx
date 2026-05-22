@@ -34,11 +34,11 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
     return (
         <ActiveEventContext.Provider value={eventState}>
-            <div className="flex min-h-screen bg-[#09090b]">
+            <div className="flex h-dvh overflow-hidden bg-[#09090b]">
                 <Sidebar />
-                <div className="flex-1 flex flex-col min-h-screen">
+                <div className="min-w-0 flex-1 flex flex-col h-dvh overflow-hidden">
                     <Header activeEvent={eventState.activeEvent} />
-                    <main className="flex-1 p-6 lg:p-8 overflow-auto">
+                    <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-8">
                         {children}
                     </main>
                 </div>

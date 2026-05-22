@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export default function Header({ activeEvent }: HeaderProps) {
     return (
-        <header className="h-12 flex items-center justify-between px-8 relative">
+        <header className="relative z-10 h-12 shrink-0 flex items-center justify-between px-8 bg-[#09090b]/95">
             {/* Soft bottom edge — gradient instead of border */}
             <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
 

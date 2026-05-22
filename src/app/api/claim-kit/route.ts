@@ -83,11 +83,15 @@ export async function POST(request: NextRequest) {
     }
 
     if (attendee.claimed_status === "Claimed") {
-        return NextResponse.json({
-            attendeeId: attendee.id,
-            claimedStatus: "Claimed",
-            alreadyClaimed: true,
-        });
+        return NextResponse.json(
+            {
+                error: "This attendee has already claimed a kit.",
+                attendeeId: attendee.id,
+                claimedStatus: "Claimed",
+                alreadyClaimed: true,
+            },
+            { status: 409 }
+        );
     }
 
     const progress = getProgress(attendee.claimed_status);

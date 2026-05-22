@@ -120,16 +120,13 @@ export default function Sidebar() {
 
     return (
         <aside
-            className={`${collapsed ? "w-[72px]" : "w-[260px]"} min-h-screen flex flex-col sidebar-transition relative`}
-            style={{
-                background: "linear-gradient(180deg, #0d0d12 0%, #0a0a0e 100%)",
-            }}
+            className={`${collapsed ? "w-[72px]" : "w-[260px]"} sticky top-0 h-dvh shrink-0 flex flex-col overflow-hidden sidebar-transition relative border-r border-white/[0.055] bg-[#0c0c10]`}
         >
             {/* Soft right edge — gradient fade instead of border */}
-            <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-white/[0.03] via-white/[0.06] to-white/[0.02]" />
+            <div className="absolute right-0 top-0 bottom-0 w-px bg-white/[0.025]" />
 
             {/* ── Brand ─────────────────────────────── */}
-            <div className={`${collapsed ? "px-4 py-5" : "px-5 py-5"} flex items-center gap-3 transition-all duration-300`}>
+            <div className={`${collapsed ? "px-4 py-5" : "px-5 py-5"} shrink-0 flex items-center gap-3 transition-all duration-300`}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-purple-500/10 shadow-lg shadow-purple-500/5">
                     <img src="/VENDY.png" alt="Vendy Logo" className="w-full h-full object-cover" />
                 </div>
@@ -144,7 +141,7 @@ export default function Sidebar() {
             </div>
 
             {/* ── Collapse toggle — inside sidebar, not floating on the edge ── */}
-            <div className={`${collapsed ? "px-3" : "px-4"} mb-1 transition-all duration-300`}>
+            <div className={`${collapsed ? "px-3" : "px-4"} shrink-0 mb-1 transition-all duration-300`}>
                 <button
                     onClick={() => setCollapsed(!collapsed)}
                     className={`w-full flex items-center ${collapsed ? "justify-center" : "justify-between"} gap-2 px-2.5 py-2 rounded-lg text-[11px] font-medium text-white/20 hover:text-white/40 hover:bg-white/[0.03] transition-all duration-200 cursor-pointer group`}
@@ -169,7 +166,7 @@ export default function Sidebar() {
             <div className={`${collapsed ? "mx-3" : "mx-4"} h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent mb-2`} />
 
             {/* ── Navigation ─────────────────────────── */}
-            <nav className={`flex-1 ${collapsed ? "px-3 py-2" : "px-4 py-2"} transition-all duration-300`}>
+            <nav className={`min-h-0 flex-1 overflow-y-auto ${collapsed ? "px-3 py-2" : "px-4 py-2"} transition-all duration-300`}>
                 {/* Back button for event view */}
                 {isEventView && (
                     <div className="mb-3 pb-3">
@@ -236,7 +233,7 @@ export default function Sidebar() {
             </nav>
 
             {/* ── Footer / Sign Out ──────────────────── */}
-            <div className={`${collapsed ? "px-3" : "px-4"} pb-5 space-y-2 transition-all duration-300`}>
+            <div className={`${collapsed ? "px-3" : "px-4"} shrink-0 pb-5 space-y-2 bg-[#0c0c10] transition-all duration-300`}>
                 {/* Divider */}
                 <div className="h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent mb-1" />
 
