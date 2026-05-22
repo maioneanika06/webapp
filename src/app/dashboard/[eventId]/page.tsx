@@ -35,7 +35,7 @@ export default function EventOverview() {
             {/* Page Header */}
             <div>
                 <h2 className="text-2xl font-bold text-white">Event Overview</h2>
-                <p className="text-white/40 text-sm mt-1">Key metrics for {activeEvent.name}</p>
+                <p className="text-white/40 text-sm mt-1">Event database for {activeEvent.name}</p>
             </div>
 
             {/* Event Details Card */}

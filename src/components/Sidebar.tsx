@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { isSuperAdminEmail } from "@/lib/admin";
 import { useState, createContext, useContext } from "react";
 
 // Sidebar context so layout can read collapsed state
@@ -23,7 +24,7 @@ export default function Sidebar() {
     const { user, signOut } = useAuth();
     const [collapsed, setCollapsed] = useState(false);
 
-    const isSuperAdmin = user?.email === "vendy.system@gmail.com";
+    const isSuperAdmin = isSuperAdminEmail(user?.email);
     const isEventView = !!params.eventId;
     const eventId = params.eventId as string;
 

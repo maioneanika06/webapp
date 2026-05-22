@@ -5,11 +5,12 @@ import EventGrid from "@/components/EventGrid";
 import { useActiveEventContext } from "../layout";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { isSuperAdminEmail } from "@/lib/admin";
 
 export default function CompletedEventsDashboard() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const isSuperAdmin = user?.email === "vendy.system@gmail.com";
+    const isSuperAdmin = isSuperAdminEmail(user?.email);
     
     const { activeEvent, events, loading: eventsLoading, setActiveEvent } = useActiveEventContext();
 

@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { useActiveEventContext } from "../layout";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { isSuperAdminEmail } from "@/lib/admin";
 
 export default function CreateEventDashboard() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const isSuperAdmin = user?.email === "vendy.system@gmail.com";
+    const isSuperAdmin = isSuperAdminEmail(user?.email);
     
     const { activeEvent, setActiveEvent, createEvent } = useActiveEventContext();
 

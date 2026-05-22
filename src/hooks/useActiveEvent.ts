@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Event } from "@/types";
 import { useAuth } from "./useAuth";
+import { isSuperAdminEmail } from "@/lib/admin";
 
 export function useActiveEvent() {
     const { user } = useAuth();
@@ -21,7 +22,7 @@ export function useActiveEvent() {
         let query = supabase.from("events").select("*").order("created_at", { ascending: false });
 
         // Super Admin gets all events, Event Staff gets all their events
-        if (user.email !== "vendy.system@gmail.com") {
+        if (!isSuperAdminEmail(user.email)) {
             query = query.eq("organizer_email", user.email);
         }
 
