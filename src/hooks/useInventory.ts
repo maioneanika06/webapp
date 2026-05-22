@@ -34,11 +34,9 @@ export function useInventory(eventId: string | null) {
     }, [eventId]);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchSlots();
     }, [fetchSlots]);
 
-    // Real-time subscription
     useEffect(() => {
         if (!eventId) return;
 
@@ -82,8 +80,6 @@ export function useInventory(eventId: string | null) {
                 .eq("id", slotId);
 
             if (error) throw error;
-            // Realtime will update the UI automatically, but we can also fetch to be safe
-            // await fetchSlots();
         },
         []
     );

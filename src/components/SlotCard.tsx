@@ -146,7 +146,7 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0 3.75h.007v.008H12v-.008zM2.697 16.126 10.102 3.3c.866-1.5 3.03-1.5 3.896 0l7.405 12.826c.866 1.5-.217 3.374-1.948 3.374H4.645c-1.731 0-2.814-1.874-1.948-3.374z" />
                         </svg>
                         <span className={`text-xs font-medium ${isOutOfStock ? "text-red-300" : "text-amber-300"}`}>
-                            {isOutOfStock ? "Slot has no remaining items." : "Slot is low after 3 confirmed dispenses."}
+                            {isOutOfStock ? "No stock available" : "Stock is low, consider restocking soon."}
                         </span>
                     </div>
                 )}
