@@ -82,6 +82,36 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Attendee not found." }, { status: 404 });
     }
 
+    if (!attendee.event_id) {
+        return NextResponse.json(
+            { error: "This attendee is not assigned to an event." },
+            { status: 409 }
+        );
+    }
+
+    const { data: event, error: eventError } = await supabaseAdmin
+        .from("events")
+        .select("id,status")
+        .eq("id", attendee.event_id)
+        .maybeSingle();
+
+    if (eventError) {
+        return NextResponse.json({ error: eventError.message }, { status: 500 });
+    }
+
+    if (!event || event.status !== "ACTIVE") {
+        return NextResponse.json(
+            {
+                error: "This event is no longer active.",
+                attendeeId: attendee.id,
+                eventId: attendee.event_id,
+                eventStatus: event?.status || null,
+                eventInactive: true,
+            },
+            { status: 409 }
+        );
+    }
+
     if (attendee.claimed_status === "Claimed") {
         return NextResponse.json(
             {
