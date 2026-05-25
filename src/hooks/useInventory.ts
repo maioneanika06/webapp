@@ -34,7 +34,7 @@ export function useInventory(eventId: string | null) {
     }, [eventId]);
 
     useEffect(() => {
-        fetchSlots();
+        void Promise.resolve().then(fetchSlots);
     }, [fetchSlots]);
 
     useEffect(() => {

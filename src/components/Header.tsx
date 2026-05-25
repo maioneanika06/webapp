@@ -1,12 +1,33 @@
 "use client";
 
 import type { Event } from "@/types";
+import { useInventory } from "@/hooks/useInventory";
 
 interface HeaderProps {
     activeEvent: Event | null;
 }
 
 export default function Header({ activeEvent }: HeaderProps) {
+    const { slots, loading } = useInventory(activeEvent?.id ?? null);
+    const outOfStockSlots = slots.filter((slot) => Number(slot.stock_count) === 0);
+    const lowStockSlots = slots.filter((slot) => {
+        const stock = Number(slot.stock_count);
+        const threshold = Number(slot.low_stock_threshold ?? 2);
+        return stock > 0 && stock <= threshold;
+    });
+    const hasStockAlert = !loading && activeEvent?.status === "ACTIVE" && (outOfStockSlots.length > 0 || lowStockSlots.length > 0);
+    const stockAlertText = outOfStockSlots.length > 0
+        ? `${outOfStockSlots.length} out of stock${lowStockSlots.length > 0 ? `, ${lowStockSlots.length} low` : ""}`
+        : `${lowStockSlots.length} low stock`;
+    const stockAlertTitle = [
+        outOfStockSlots.length > 0
+            ? `Out of stock: ${outOfStockSlots.map((slot) => `Slot ${slot.slot_number}`).join(", ")}`
+            : "",
+        lowStockSlots.length > 0
+            ? `Low stock: ${lowStockSlots.map((slot) => `Slot ${slot.slot_number}`).join(", ")}`
+            : "",
+    ].filter(Boolean).join(" | ");
+
     return (
         <header className="relative z-10 h-12 shrink-0 flex items-center justify-between px-8 bg-[#09090b]/95">
             {/* Soft bottom edge — gradient instead of border */}
@@ -35,6 +56,21 @@ export default function Header({ activeEvent }: HeaderProps) {
 
             {/* Right side - date */}
             <div className="flex items-center gap-4">
+                {hasStockAlert && (
+                    <div
+                        title={stockAlertTitle}
+                        className={`hidden sm:flex items-center gap-2 rounded-lg border px-3 py-1.5 text-[12px] font-semibold ${
+                            outOfStockSlots.length > 0
+                                ? "border-red-500/25 bg-red-500/10 text-red-300"
+                                : "border-amber-500/25 bg-amber-500/10 text-amber-300"
+                        }`}
+                    >
+                        <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" />
+                        </svg>
+                        <span>Inventory alert: {stockAlertText}</span>
+                    </div>
+                )}
                 {activeEvent && (
                     <p className="text-white/15 text-[12px] font-medium">
                         {new Date(activeEvent.event_date).toLocaleDateString("en-US", {
