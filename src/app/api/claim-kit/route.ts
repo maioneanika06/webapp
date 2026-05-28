@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { Attendee } from "@/types";
+import { writeLatencyLog } from "@/lib/server-latency";
 
 type ClaimSignal = "qr" | "face" | "ir";
 
@@ -40,8 +41,22 @@ function nextStatus(progress: { qr: boolean; face: boolean; ir: boolean }) {
 }
 
 export async function POST(request: NextRequest) {
+    const apiStart = performance.now();
+    async function jsonResponse(body: Record<string, unknown>, init?: ResponseInit) {
+        await writeLatencyLog({
+            process: "Claim Kit API",
+            latencySec: (performance.now() - apiStart) / 1000,
+            status: init?.status && init.status >= 400 ? "failed" : "success",
+            metadata: {
+                statusCode: init?.status || 200,
+                error: body.error,
+            },
+        });
+        return NextResponse.json(body, init);
+    }
+
     if (!supabaseAdmin) {
-        return NextResponse.json(
+        return jsonResponse(
             { error: "SUPABASE_SERVICE_ROLE_KEY is required for claim updates." },
             { status: 500 }
         );
@@ -51,12 +66,12 @@ export async function POST(request: NextRequest) {
     try {
         body = await request.json();
     } catch {
-        return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+        return jsonResponse({ error: "Invalid JSON body." }, { status: 400 });
     }
 
     const attendeeId = body.attendeeId || body.id || body.qrCode;
     if (!attendeeId) {
-        return NextResponse.json(
+        return jsonResponse(
             { error: "attendeeId, id, or qrCode is required." },
             { status: 400 }
         );
@@ -74,16 +89,16 @@ export async function POST(request: NextRequest) {
 
     const { data: attendees, error: attendeeError } = await attendeeQuery;
     if (attendeeError) {
-        return NextResponse.json({ error: attendeeError.message }, { status: 500 });
+        return jsonResponse({ error: attendeeError.message }, { status: 500 });
     }
 
     const attendee = attendees?.[0] as Pick<Attendee, "id" | "event_id" | "role" | "claimed_status"> | undefined;
     if (!attendee) {
-        return NextResponse.json({ error: "Attendee not found." }, { status: 404 });
+        return jsonResponse({ error: "Attendee not found." }, { status: 404 });
     }
 
     if (!attendee.event_id) {
-        return NextResponse.json(
+        return jsonResponse(
             { error: "This attendee is not assigned to an event." },
             { status: 409 }
         );
@@ -96,11 +111,11 @@ export async function POST(request: NextRequest) {
         .maybeSingle();
 
     if (eventError) {
-        return NextResponse.json({ error: eventError.message }, { status: 500 });
+        return jsonResponse({ error: eventError.message }, { status: 500 });
     }
 
     if (!event || event.status !== "ACTIVE") {
-        return NextResponse.json(
+        return jsonResponse(
             {
                 error: "This event is no longer active.",
                 attendeeId: attendee.id,
@@ -113,7 +128,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (attendee.claimed_status === "Claimed") {
-        return NextResponse.json(
+        return jsonResponse(
             {
                 error: "This attendee has already claimed a kit.",
                 attendeeId: attendee.id,
@@ -134,7 +149,7 @@ export async function POST(request: NextRequest) {
 
     const status = nextStatus(progress);
     if (!status) {
-        return NextResponse.json(
+        return jsonResponse(
             {
                 error: "No verification signal was provided.",
                 requiredSignals: ["qrVerified", "faceVerified", "irBreakbeamTriggered"],
@@ -144,7 +159,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (progress.ir && (!progress.qr || !progress.face)) {
-        return NextResponse.json(
+        return jsonResponse(
             {
                 error: "IR breakbeam cannot mark a kit claimed until QR and face verification are recorded.",
                 claimedStatus: attendee.claimed_status || null,
@@ -160,7 +175,7 @@ export async function POST(request: NextRequest) {
         .eq("id", attendee.id);
 
     if (updateError) {
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        return jsonResponse({ error: updateError.message }, { status: 500 });
     }
 
     let inventoryUpdated = false;
@@ -196,7 +211,7 @@ export async function POST(request: NextRequest) {
         }
     }
 
-    return NextResponse.json({
+    return jsonResponse({
         attendeeId: attendee.id,
         claimedStatus: status,
         progress,

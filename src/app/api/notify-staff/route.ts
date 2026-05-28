@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { measureLatency } from "@/lib/server-latency";
 
 export async function POST(req: Request) {
     try {
@@ -51,7 +52,9 @@ export async function POST(req: Request) {
             `,
         };
 
-        await transporter.sendMail(mailOptions);
+        await measureLatency("Notify Staff Email Send", async () => {
+            await transporter.sendMail(mailOptions);
+        }, { organizerEmail, eventId });
 
         return NextResponse.json({ success: true });
     } catch (error) {
