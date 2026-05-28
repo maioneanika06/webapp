@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import { logLatency } from "@/lib/latency";
 import type { InventorySlot } from "@/types";
 
 export function useInventory(eventId: string | null) {
@@ -16,6 +17,7 @@ export function useInventory(eventId: string | null) {
         }
 
         setLoading(true);
+        const fetchStart = performance.now();
         const { data, error } = await supabase
             .from("inventory")
             .select("*")
@@ -24,12 +26,18 @@ export function useInventory(eventId: string | null) {
             .limit(6);
 
         if (error) {
+            logLatency("Admin Dashboard Inventory Fetch", fetchStart, "failed", {
+                reason: error.message,
+            });
             console.error("Error fetching inventory slots:", error.message || JSON.stringify(error));
             setLoading(false);
             return;
         }
 
         setSlots(data || []);
+        logLatency("Admin Dashboard Inventory Fetch", fetchStart, "success", {
+            slots: data?.length || 0,
+        });
         setLoading(false);
     }, [eventId]);
 
@@ -51,6 +59,7 @@ export function useInventory(eventId: string | null) {
                     filter: `event_id=eq.${eventId}`,
                 },
                 (payload) => {
+                    const syncStart = performance.now();
                     if (payload.eventType === "INSERT") {
                         setSlots((prev) => {
                             const newSlots = [...prev, payload.new as InventorySlot];
@@ -63,6 +72,9 @@ export function useInventory(eventId: string | null) {
                     } else if (payload.eventType === "DELETE") {
                         setSlots((prev) => prev.filter((s) => s.id !== (payload.old as InventorySlot).id));
                     }
+                    logLatency("Admin Dashboard Sync", syncStart, "success", {
+                        eventType: payload.eventType,
+                    });
                 }
             )
             .subscribe();
@@ -74,24 +86,38 @@ export function useInventory(eventId: string | null) {
 
     const updateSlot = useCallback(
         async (slotId: string, updates: Partial<Pick<InventorySlot, "assigned_role">>) => {
+            const updateStart = performance.now();
             const { error } = await supabase
                 .from("inventory")
                 .update(updates)
                 .eq("id", slotId);
 
-            if (error) throw error;
+            if (error) {
+                logLatency("Inventory Slot Role Update", updateStart, "failed", {
+                    reason: error.message,
+                });
+                throw error;
+            }
+            logLatency("Inventory Slot Role Update", updateStart);
         },
         []
     );
 
     const restockSlot = useCallback(
         async (slotId: string) => {
+            const restockStart = performance.now();
             const { error } = await supabase
                 .from("inventory")
                 .update({ stock_count: 5, low_stock_threshold: 2 })
                 .eq("id", slotId);
 
-            if (error) throw error;
+            if (error) {
+                logLatency("Inventory Restock", restockStart, "failed", {
+                    reason: error.message,
+                });
+                throw error;
+            }
+            logLatency("Inventory Restock", restockStart);
         },
         []
     );

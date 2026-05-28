@@ -1,13 +1,16 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { Event } from "@/types";
 import { useInventory } from "@/hooks/useInventory";
+import { logLatency } from "@/lib/latency";
 
 interface HeaderProps {
     activeEvent: Event | null;
 }
 
 export default function Header({ activeEvent }: HeaderProps) {
+    const alertStart = useRef<number | null>(null);
     const { slots, loading } = useInventory(activeEvent?.id ?? null);
     const outOfStockSlots = slots.filter((slot) => Number(slot.stock_count) === 0);
     const lowStockSlots = slots.filter((slot) => {
@@ -27,6 +30,20 @@ export default function Header({ activeEvent }: HeaderProps) {
             ? `Low stock: ${lowStockSlots.map((slot) => `Slot ${slot.slot_number}`).join(", ")}`
             : "",
     ].filter(Boolean).join(" | ");
+
+    useEffect(() => {
+        if (!hasStockAlert) {
+            alertStart.current = null;
+            return;
+        }
+
+        const startedAt = alertStart.current ?? performance.now();
+        logLatency("Low-Stock Alert Display", startedAt, "success", {
+            outOfStock: outOfStockSlots.length,
+            lowStock: lowStockSlots.length,
+        });
+        alertStart.current = performance.now();
+    }, [hasStockAlert, outOfStockSlots.length, lowStockSlots.length]);
 
     return (
         <header className="relative z-10 h-12 shrink-0 flex items-center justify-between px-8 bg-[#09090b]/95">
