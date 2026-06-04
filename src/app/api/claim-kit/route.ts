@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { Attendee } from "@/types";
-import { writeLatencyLog } from "@/lib/server-latency";
+import { measureLatency, writeLatencyLog } from "@/lib/server-latency";
 
 type ClaimSignal = "qr" | "face" | "ir";
 
@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
             { status: 500 }
         );
     }
+    const adminClient = supabaseAdmin;
 //holds the data sent sa api and icheck niya if valid json 
     let body/*main data sent galing sa client*/: ClaimKitBody;
     try {
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    let attendeeQuery = supabaseAdmin
+    let attendeeQuery = adminClient
         .from("attendees")
         .select("id,event_id,role,claimed_status")
         .eq("id", attendeeId)
@@ -104,7 +105,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const { data: event, error: eventError } = await supabaseAdmin
+    const { data: event, error: eventError } = await adminClient
         .from("events")
         .select("id,status")
         .eq("id", attendee.event_id)
@@ -169,10 +170,20 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const { error: updateError } = await supabaseAdmin
-        .from("attendees")
-        .update({ claimed_status: status })
-        .eq("id", attendee.id);
+    const { error: updateError } = await measureLatency(
+        "Claim Status Database Update",
+        async () =>
+            await adminClient
+                .from("attendees")
+                .update({ claimed_status: status })
+                .eq("id", attendee.id),
+        {
+            attendeeId: attendee.id,
+            eventId: attendee.event_id,
+            claimedStatus: status,
+            updatedAt: new Date().toISOString(),
+        }
+    );
 
     if (updateError) {
         return jsonResponse({ error: updateError.message }, { status: 500 });
@@ -183,7 +194,7 @@ export async function POST(request: NextRequest) {
 
     if (status === "Claimed" && attendee.event_id) {
         const assignedRole = attendee.role || "attendee";
-        const { data: slot, error: slotError } = await supabaseAdmin
+        const { data: slot, error: slotError } = await adminClient
             .from("inventory")
             .select("id,stock_count")
             .eq("event_id", attendee.event_id)
@@ -198,10 +209,24 @@ export async function POST(request: NextRequest) {
         } else if (!slot) {
             inventoryWarning = `No stock available for ${assignedRole}.`;
         } else {
-            const { error: inventoryError } = await supabaseAdmin
-                .from("inventory")
-                .update({ stock_count: Math.max(0, Number(slot.stock_count) - 1) })
-                .eq("id", slot.id);
+            const newStock = Math.max(0, Number(slot.stock_count) - 1);
+            const { error: inventoryError } = await measureLatency(
+                "Inventory Deduction Database Update",
+                async () =>
+                    await adminClient
+                        .from("inventory")
+                        .update({ stock_count: newStock })
+                        .eq("id", slot.id),
+                {
+                    attendeeId: attendee.id,
+                    eventId: attendee.event_id,
+                    role: assignedRole,
+                    slotId: slot.id,
+                    previousStock: Number(slot.stock_count),
+                    newStock,
+                    updatedAt: new Date().toISOString(),
+                }
+            );
 
             if (inventoryError) {
                 inventoryWarning = inventoryError.message;

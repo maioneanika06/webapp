@@ -72,7 +72,18 @@ export function useInventory(eventId: string | null) {
                     } else if (payload.eventType === "DELETE") {
                         setSlots((prev) => prev.filter((s) => s.id !== (payload.old as InventorySlot).id));
                     }
+                    const row = (payload.new || payload.old) as Partial<InventorySlot>;
+                    logLatency("Admin Dashboard Inventory Realtime Update", syncStart, "success", {
+                        eventId,
+                        eventType: payload.eventType,
+                        slotId: row.id,
+                        slotNumber: row.slot_number,
+                        assignedRole: row.assigned_role,
+                        stockCount: row.stock_count,
+                        receivedAt: new Date().toISOString(),
+                    });
                     logLatency("Admin Dashboard Sync", syncStart, "success", {
+                        eventId,
                         eventType: payload.eventType,
                     });
                 }

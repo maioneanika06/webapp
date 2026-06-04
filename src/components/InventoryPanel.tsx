@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import type { InventorySlot } from "@/types";
+import { logLatency } from "@/lib/latency";
 import SlotCard from "./SlotCard";
 
 interface InventoryPanelProps {
@@ -12,6 +14,27 @@ interface InventoryPanelProps {
 }
 
 export default function InventoryPanel({ slots, loading, onUpdateSlot, onRestockSlot, isReadOnly = false }: InventoryPanelProps) {
+    const totalStock = slots.reduce((acc, s) => acc + s.stock_count, 0);
+    const lowStockCount = slots.filter((s) => s.stock_count > 0 && s.stock_count <= 2).length;
+    const outOfStockCount = slots.filter((s) => s.stock_count === 0).length;
+
+    useEffect(() => {
+        if (loading) return;
+
+        const renderStart = performance.now();
+        logLatency("Inventory Summary Display Update", renderStart, "success", {
+            totalStock,
+            lowStockCount,
+            outOfStockCount,
+            slots: slots.map((slot) => ({
+                slotNumber: slot.slot_number,
+                assignedRole: slot.assigned_role,
+                stockCount: slot.stock_count,
+            })),
+            displayedAt: new Date().toISOString(),
+        });
+    }, [loading, totalStock, lowStockCount, outOfStockCount, slots]);
+
     if (loading) {
         return (
             <div className="backdrop-blur-xl bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12">
@@ -22,10 +45,6 @@ export default function InventoryPanel({ slots, loading, onUpdateSlot, onRestock
             </div>
         );
     }
-
-    const totalStock = slots.reduce((acc, s) => acc + s.stock_count, 0);
-    const lowStockCount = slots.filter((s) => s.stock_count > 0 && s.stock_count <= 2).length;
-    const outOfStockCount = slots.filter((s) => s.stock_count === 0).length;
 
     return (
         <div className="space-y-6">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import { logLatency } from "@/lib/latency";
 import type { Attendee } from "@/types";
 
 export function useAttendees(eventId: string | null) {
@@ -19,6 +20,7 @@ export function useAttendees(eventId: string | null) {
         }
 
         setLoading(true);
+        const fetchStart = performance.now();
         const { data, error } = await supabase
             .from("attendees")
             .select("*")
@@ -26,12 +28,20 @@ export function useAttendees(eventId: string | null) {
             .order("created_at", { ascending: false });
 
         if (error) {
+            logLatency("Admin Dashboard Attendees Fetch", fetchStart, "failed", {
+                eventId,
+                reason: error.message,
+            });
             console.error("Error fetching attendees:", error.message || JSON.stringify(error));
             setLoading(false);
             return;
         }
 
         setAttendees(data || []);
+        logLatency("Admin Dashboard Attendees Fetch", fetchStart, "success", {
+            eventId,
+            attendees: data?.length || 0,
+        });
         setLoading(false);
     }, [eventId]);
 
@@ -55,6 +65,7 @@ export function useAttendees(eventId: string | null) {
                     filter: `event_id=eq.${eventId}`,
                 },
                 (payload) => {
+                    const realtimeStart = performance.now();
                     if (payload.eventType === "INSERT") {
                         setAttendees((prev) => [payload.new as Attendee, ...prev]);
                     } else if (payload.eventType === "UPDATE") {
@@ -64,6 +75,15 @@ export function useAttendees(eventId: string | null) {
                     } else if (payload.eventType === "DELETE") {
                         setAttendees((prev) => prev.filter((a) => a.id !== (payload.old as Attendee).id));
                     }
+                    const row = (payload.new || payload.old) as Partial<Attendee>;
+                    logLatency("Admin Dashboard Attendee Realtime Update", realtimeStart, "success", {
+                        eventId,
+                        eventType: payload.eventType,
+                        attendeeId: row.id,
+                        claimedStatus: row.claimed_status,
+                        role: row.role,
+                        receivedAt: new Date().toISOString(),
+                    });
                 }
             )
             .subscribe();

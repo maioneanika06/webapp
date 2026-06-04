@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { logLatency } from "@/lib/latency";
 import type { Attendee } from "@/types";
 
 interface UsersTableProps {
@@ -38,6 +39,19 @@ export default function UsersTable({
         { id: "speaker", label: "Speakers" },
         { id: "attendee", label: "Attendees" },
     ];
+    const claimedCount = attendees.filter((attendee) => attendee.claimed_status === "Claimed").length;
+    const unclaimedCount = attendees.length - claimedCount;
+
+    useEffect(() => {
+        const renderStart = performance.now();
+        logLatency("Attendee Claim Summary Display Update", renderStart, "success", {
+            visibleAttendees: attendees.length,
+            totalCount,
+            claimedCount,
+            unclaimedCount,
+            displayedAt: new Date().toISOString(),
+        });
+    }, [attendees, totalCount, claimedCount, unclaimedCount]);
 
     const getClaimBadge = (status: Attendee["claimed_status"]) => {
         if (status === "Claimed") {
@@ -73,15 +87,26 @@ export default function UsersTable({
 
     const handleRoleChange = async (attendeeId: string, newRole: "attendee" | "vip" | "speaker") => {
         setRoleStatus((prev) => ({ ...prev, [attendeeId]: "loading" }));
+        const roleUpdateStart = window.performance.now();
         const { error } = await supabase.from("attendees").update({ role: newRole }).eq("id", attendeeId);
 
         if (!error) {
+            logLatency("Attendee Role Database Update", roleUpdateStart, "success", {
+                attendeeId,
+                newRole,
+                updatedAt: new Date().toISOString(),
+            });
             setRoleStatus((prev) => ({ ...prev, [attendeeId]: "success" }));
             if (onRoleUpdated) onRoleUpdated(attendeeId, newRole);
             setTimeout(() => {
                 setRoleStatus((prev) => ({ ...prev, [attendeeId]: null }));
             }, 2500);
         } else {
+            logLatency("Attendee Role Database Update", roleUpdateStart, "failed", {
+                attendeeId,
+                newRole,
+                reason: error.message,
+            });
             console.error("Failed to update role:", error);
             setRoleStatus((prev) => ({ ...prev, [attendeeId]: null }));
         }
