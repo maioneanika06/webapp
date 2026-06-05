@@ -50,7 +50,7 @@ export default function CreateEventDashboard() {
     if (authLoading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="w-8 h-8 border-2 border-purple-500/15 border-t-purple-400 rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-purple-800/35 border-t-purple-400 rounded-full animate-spin" />
             </div>
         );
     }
@@ -66,7 +66,7 @@ export default function CreateEventDashboard() {
                 <p className="text-slate-400 text-[13px] mt-1">Set up a new vending machine event portal</p>
             </div>
 
-            <div className="bg-white border border-purple-100 rounded-xl p-7">
+            <div className="bg-white border border-purple-800/25 rounded-xl p-7">
                 <div className="space-y-5">
                     <div>
                         <label className="block text-slate-400 text-[11px] font-medium mb-2 uppercase tracking-wider">Event Name</label>
@@ -75,7 +75,7 @@ export default function CreateEventDashboard() {
                             value={eventName}
                             onChange={(e) => setEventName(e.target.value)}
                             placeholder="e.g., Tech Conference 2026"
-                            className="w-full px-4 py-2.5 bg-white border border-purple-100 rounded-lg text-slate-800 text-sm placeholder:text-slate-400 focus:outline-none focus:border-purple-500/30 focus:ring-1 focus:ring-purple-500/15 transition-all"
+                            className="w-full px-4 py-2.5 bg-white border border-purple-800/25 rounded-lg text-slate-800 text-sm placeholder:text-slate-400 focus:outline-none focus:border-purple-800/55 focus:ring-1 focus:ring-purple-500/15 transition-all"
                         />
                     </div>
                     <div>
@@ -84,7 +84,7 @@ export default function CreateEventDashboard() {
                             type="date"
                             value={eventDate}
                             onChange={(e) => setEventDate(e.target.value)}
-                            className="w-full px-4 py-2.5 bg-white border border-purple-100 rounded-lg text-slate-800 text-sm focus:outline-none focus:border-purple-500/30 focus:ring-1 focus:ring-purple-500/15 transition-all [color-scheme:light]"
+                            className="w-full px-4 py-2.5 bg-white border border-purple-800/25 rounded-lg text-slate-800 text-sm focus:outline-none focus:border-purple-800/55 focus:ring-1 focus:ring-purple-500/15 transition-all [color-scheme:light]"
                         />
                     </div>
                     <div>
@@ -94,7 +94,7 @@ export default function CreateEventDashboard() {
                             value={organizerEmail}
                             onChange={(e) => setOrganizerEmail(e.target.value)}
                             placeholder="organizer@example.com"
-                            className="w-full px-4 py-2.5 bg-white border border-purple-100 rounded-lg text-slate-800 text-sm placeholder:text-slate-400 focus:outline-none focus:border-purple-500/30 focus:ring-1 focus:ring-purple-500/15 transition-all"
+                            className="w-full px-4 py-2.5 bg-white border border-purple-800/25 rounded-lg text-slate-800 text-sm placeholder:text-slate-400 focus:outline-none focus:border-purple-800/55 focus:ring-1 focus:ring-purple-500/15 transition-all"
                         />
                         <p className="text-slate-400 text-[11px] mt-2">
                             The organizer will receive an email to access their event dashboard.
@@ -126,5 +126,6 @@ export default function CreateEventDashboard() {
         </div>
     );
 }
+
 
 

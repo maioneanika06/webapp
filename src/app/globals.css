@@ -21,16 +21,16 @@
   --accent-900: #581c87;
 
   /* Surface colors */
-  --surface-0: #fbf9ff;
+  --surface-0: #f6f3fa;
   --surface-1: #ffffff;
-  --surface-2: #f6f2ff;
-  --surface-3: #eee7fb;
-  --surface-4: #e7ddf8;
+  --surface-2: #f3eef9;
+  --surface-3: #e7dcf2;
+  --surface-4: #d6c3e8;
 
   /* Border */
-  --border-subtle: rgba(88, 28, 135, 0.08);
-  --border-default: rgba(88, 28, 135, 0.12);
-  --border-strong: rgba(88, 28, 135, 0.2);
+  --border-subtle: rgba(76, 29, 149, 0.22);
+  --border-default: rgba(76, 29, 149, 0.32);
+  --border-strong: rgba(76, 29, 149, 0.48);
 
   /* Sidebar */
   --sidebar-width: 260px;
@@ -40,7 +40,7 @@
 /* ── Base ───────────────────────────────────────────── */
 body {
   background: var(--surface-0);
-  color: #2f2140;
+  color: #1f1235;
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -162,3 +162,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .card-premium:hover::before {
   opacity: 0;
 }
+

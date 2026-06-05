@@ -32,9 +32,9 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
     const stockPercent = (currentStock / MAX_CAPACITY) * 100;
 
     const roleColors: Record<string, { bg: string; text: string; border: string }> = {
-        vip: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
-        speaker: { bg: "bg-sky-50", text: "text-sky-700", border: "border-sky-200" },
-        attendee: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
+        vip: { bg: "bg-amber-50", text: "text-amber-800", border: "border-amber-300" },
+        speaker: { bg: "bg-sky-50", text: "text-sky-800", border: "border-sky-300" },
+        attendee: { bg: "bg-[#f4ecfb]", text: "text-purple-900", border: "border-purple-800/35" },
     };
 
     const colors = roleColors[slot.assigned_role] || roleColors.attendee;
@@ -71,7 +71,7 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
     };
 
     return (
-        <div className="bg-white border border-purple-100 rounded-2xl p-5 transition-colors duration-200 hover:border-purple-200">
+        <div className="bg-white border border-purple-800/25 rounded-2xl p-5 transition-colors duration-200 hover:border-purple-800/35">
             <div className="flex items-start justify-between gap-4 mb-5">
                 <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-xl ${colors.bg} ${colors.border} border flex items-center justify-center`}>
@@ -98,7 +98,7 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
                             value={role}
                             onChange={(e) => setRole(e.target.value as InventorySlot["assigned_role"])}
                             disabled={isReadOnly || savingRole}
-                            className="flex-1 px-3 py-2 bg-purple-50 border border-purple-200 rounded-lg text-slate-800 text-sm focus:outline-none focus:border-purple-500/40 cursor-pointer [color-scheme:light] disabled:opacity-50"
+                            className="flex-1 px-3 py-2 bg-white border border-purple-800/35 rounded-lg text-slate-900 text-sm focus:outline-none focus:border-purple-800/60 cursor-pointer [color-scheme:light] disabled:opacity-50"
                         >
                             <option value="vip">VIP</option>
                             <option value="speaker">Speaker</option>
@@ -107,14 +107,14 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
                         <button
                             onClick={handleRoleSave}
                             disabled={isReadOnly || savingRole || role === slot.assigned_role}
-                            className="px-3 py-2 text-xs font-medium text-slate-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                            className="px-3 py-2 text-xs font-medium text-slate-700 bg-white hover:bg-[#f4ecfb] border border-purple-800/35 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                         >
                             {savingRole ? "Saving" : "Save"}
                         </button>
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-purple-100 bg-white p-4">
+                <div className="rounded-xl border border-purple-800/25 bg-white p-4">
                     <div className="flex items-end justify-between">
                         <div>
                             <p className="text-slate-500 text-xs uppercase tracking-wider font-medium">Current Stock</p>
@@ -154,5 +154,6 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
         </div>
     );
 }
+
 
 

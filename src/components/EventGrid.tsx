@@ -11,8 +11,8 @@ interface EventGridProps {
 export default function EventGrid({ events, emptyMessage }: EventGridProps) {
     if (events.length === 0) {
         return (
-            <div className="bg-white border border-purple-100 rounded-xl p-16 text-center animate-fadeIn">
-                <div className="w-12 h-12 mx-auto mb-5 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center">
+            <div className="bg-white border border-purple-800/25 rounded-xl p-16 text-center animate-fadeIn">
+                <div className="w-12 h-12 mx-auto mb-5 bg-[#f4ecfb] border border-purple-800/25 rounded-xl flex items-center justify-center">
                     <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
@@ -29,7 +29,7 @@ export default function EventGrid({ events, emptyMessage }: EventGridProps) {
 
                 return (
                     <Link key={event.id} href={`/dashboard/${event.id}`} className="group block">
-                        <div className="card-premium h-full bg-white border border-purple-100 rounded-xl p-5 transition-all duration-300 hover:bg-purple-50 hover:border-purple-200 hover:-translate-y-0.5">
+                        <div className="card-premium h-full bg-white border border-purple-800/25 rounded-xl p-5 transition-colors duration-200 hover:bg-[#faf8fd] hover:border-purple-800/35">
                             {/* Top row: status + arrow */}
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-2">
@@ -39,7 +39,7 @@ export default function EventGrid({ events, emptyMessage }: EventGridProps) {
                                     </span>
                                 </div>
 
-                                <div className="w-7 h-7 rounded-lg bg-purple-50 border border-purple-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-0.5">
+                                <div className="w-7 h-7 rounded-lg bg-[#f4ecfb] border border-purple-800/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                     <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                                     </svg>
@@ -52,7 +52,7 @@ export default function EventGrid({ events, emptyMessage }: EventGridProps) {
                             </h3>
 
                             {/* Metadata */}
-                            <div className="mt-5 pt-4 border-t border-purple-100 space-y-2.5">
+                            <div className="mt-5 pt-4 border-t border-purple-800/25 space-y-2.5">
                                 <div className="flex items-center gap-2.5 text-slate-400 text-[12px]">
                                     <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
@@ -79,5 +79,6 @@ export default function EventGrid({ events, emptyMessage }: EventGridProps) {
         </div>
     );
 }
+
 
 

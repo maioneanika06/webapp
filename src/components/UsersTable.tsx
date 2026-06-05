@@ -81,7 +81,7 @@ export default function UsersTable({
         return {
             label: "Unclaimed",
             dot: "bg-white/30",
-            className: "bg-purple-50 text-slate-500 border-purple-100",
+            className: "bg-[#f4ecfb] text-slate-600 border-purple-800/25",
         };
     };
 
@@ -139,9 +139,9 @@ export default function UsersTable({
 
     if (loading) {
         return (
-            <div className="bg-white border border-purple-100 rounded-2xl p-12">
+            <div className="bg-white border border-purple-800/25 rounded-2xl p-12">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-10 h-10 border-3 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
+                    <div className="w-10 h-10 border-3 border-purple-800/40 border-t-purple-500 rounded-full animate-spin" />
                     <p className="text-slate-500 text-sm">Loading attendees...</p>
                 </div>
             </div>
@@ -151,15 +151,15 @@ export default function UsersTable({
     return (
         <div className="space-y-4">
             {/* Role Tabs */}
-            <div className="flex bg-white border border-purple-100 rounded-2xl p-1.5 w-max">
+            <div className="flex bg-white border border-purple-800/25 rounded-2xl p-1.5 w-max">
                 {roleTabs.map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => onFilterRoleChange(tab.id)}
                         className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${
                             filterRole === tab.id
-                                ? "bg-purple-100 text-purple-800"
-                                : "text-slate-500 hover:text-slate-700 hover:bg-purple-50"
+                                ? "bg-[#eee5f7] text-purple-900"
+                                : "text-slate-600 hover:text-purple-900 hover:bg-[#f4ecfb]"
                         }`}
                     >
                         {tab.label}
@@ -168,7 +168,7 @@ export default function UsersTable({
             </div>
 
             {/* Toolbar */}
-            <div className="bg-white border border-purple-100 rounded-2xl p-4">
+            <div className="bg-white border border-purple-800/25 rounded-2xl p-4">
                 <div className="flex flex-wrap items-center gap-3">
                     {/* Search */}
                     <div className="relative flex-1 min-w-[240px]">
@@ -186,7 +186,7 @@ export default function UsersTable({
                             placeholder="Search by name, email, company, or QR code..."
                             value={searchQuery}
                             onChange={(e) => onSearchChange(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 bg-purple-50 border border-purple-200 rounded-xl text-slate-800 text-sm placeholder:text-slate-400 focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                            className="w-full pl-10 pr-4 py-2.5 bg-white border border-purple-800/35 rounded-xl text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:border-purple-800/60 focus:ring-1 focus:ring-purple-800/20 transition-all"
                         />
                     </div>
 
@@ -194,7 +194,7 @@ export default function UsersTable({
                     <select
                         value={filterClaimedStatus}
                         onChange={(e) => onFilterClaimedChange(e.target.value as "all" | "claimed" | "unclaimed")}
-                        className="px-4 py-2.5 bg-purple-50 border border-purple-200 rounded-xl text-slate-600 text-sm focus:outline-none focus:border-purple-500/40 cursor-pointer [color-scheme:light]"
+                        className="px-4 py-2.5 bg-white border border-purple-800/35 rounded-xl text-slate-700 text-sm focus:outline-none focus:border-purple-800/60 cursor-pointer [color-scheme:light]"
                     >
                         <option value="all">All Claim Status</option>
                         <option value="claimed">Claimed</option>
@@ -205,7 +205,7 @@ export default function UsersTable({
                     <button
                         onClick={exportToCSV}
                         disabled={attendees.length === 0}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 hover:border-purple-300 rounded-xl text-slate-700 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ml-auto"
+                        className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-[#f4ecfb] border border-purple-800/35 hover:border-purple-800/45 rounded-xl text-slate-700 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ml-auto"
                     >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -221,11 +221,11 @@ export default function UsersTable({
             </div>
 
             {/* Table */}
-            <div className="bg-white border border-purple-100 rounded-2xl overflow-hidden">
+            <div className="bg-white border border-purple-800/25 rounded-2xl overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-purple-100">
+                            <tr className="border-b border-purple-800/25">
                                 <th className="text-left text-slate-500 text-xs uppercase tracking-wider font-medium px-6 py-4">Full Name</th>
                                 <th className="text-left text-slate-500 text-xs uppercase tracking-wider font-medium px-6 py-4">Email</th>
                                 <th className="text-left text-slate-500 text-xs uppercase tracking-wider font-medium px-6 py-4">Company</th>
@@ -249,7 +249,7 @@ export default function UsersTable({
                                 attendees.map((attendee) => (
                                     <tr
                                         key={attendee.id}
-                                        className="border-b border-purple-50 hover:bg-white transition-colors"
+                                        className="border-b border-purple-800/10 hover:bg-[#faf8fd] transition-colors"
                                     >
                                         <td className="px-6 py-4">
                                             <p className="text-slate-800 text-sm font-medium">{attendee.full_name}</p>
@@ -267,7 +267,7 @@ export default function UsersTable({
                                                     onChange={(e) => handleRoleChange(attendee.id, e.target.value as Attendee["role"])}
                                                     disabled={isReadOnly || attendee.claimed_status === "Claimed" || roleStatus[attendee.id] === "loading"}
                                                     title={attendee.claimed_status === "Claimed" ? "Claimed attendees cannot change roles." : undefined}
-                                                    className="pl-3 pr-8 py-1.5 bg-purple-50 border border-purple-200 rounded-lg text-slate-700 text-xs font-medium focus:outline-none focus:border-purple-500/40 focus:ring-1 focus:ring-purple-500/20 cursor-pointer appearance-none [color-scheme:light] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="pl-3 pr-8 py-1.5 bg-white border border-purple-800/35 rounded-lg text-slate-700 text-xs font-medium focus:outline-none focus:border-purple-800/60 focus:ring-1 focus:ring-purple-800/20 cursor-pointer appearance-none [color-scheme:light] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                                     style={{ backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(71, 85, 105, 0.65)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.5rem center', backgroundSize: '1em' }}
                                                 >
                                                     <option value="attendee">Attendee</option>
@@ -275,7 +275,7 @@ export default function UsersTable({
                                                     <option value="speaker">Speaker</option>
                                                 </select>
                                                 {roleStatus[attendee.id] === "loading" && (
-                                                    <div className="w-3.5 h-3.5 border-2 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
+                                                    <div className="w-3.5 h-3.5 border-2 border-purple-800/40 border-t-purple-500 rounded-full animate-spin" />
                                                 )}
                                                 {roleStatus[attendee.id] === "success" && (
                                                     <svg className="w-4 h-4 text-emerald-500 animate-[bounce_0.5s_ease-in-out]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -305,5 +305,6 @@ export default function UsersTable({
         </div>
     );
 }
+
 
 

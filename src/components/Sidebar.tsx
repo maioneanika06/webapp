@@ -122,7 +122,7 @@ export default function Sidebar() {
 
     return (
         <aside
-            className={`${collapsed ? "w-[72px]" : "w-[260px]"} sticky top-0 h-dvh shrink-0 flex flex-col overflow-hidden sidebar-transition relative border-r border-purple-100 bg-white`}
+            className={`${collapsed ? "w-[72px]" : "w-[260px]"} sticky top-0 h-dvh shrink-0 flex flex-col overflow-hidden sidebar-transition relative border-r border-purple-800/25 bg-white`}
         >
             {/* Soft right edge — gradient fade instead of border */}
             <div className="absolute right-0 top-0 bottom-0 w-px bg-purple-100" />
@@ -146,14 +146,14 @@ export default function Sidebar() {
             <div className={`${collapsed ? "px-3" : "px-4"} shrink-0 mb-1 transition-all duration-300`}>
                 <button
                     onClick={() => setCollapsed(!collapsed)}
-                    className={`w-full flex items-center ${collapsed ? "justify-center" : "justify-between"} gap-2 px-2.5 py-2 rounded-lg text-[11px] font-medium text-slate-400 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200 cursor-pointer group`}
+                    className={`w-full flex items-center ${collapsed ? "justify-center" : "justify-between"} gap-2 px-2.5 py-2 rounded-lg text-[11px] font-medium text-slate-500 hover:text-purple-900 hover:bg-[#f4ecfb] transition-all duration-200 cursor-pointer group`}
                     title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                     {!collapsed && (
                         <span className="sidebar-content-fade uppercase tracking-widest text-slate-400">Menu</span>
                     )}
                     <svg
-                        className={`w-3.5 h-3.5 transition-transform duration-300 text-slate-400 group-hover:text-purple-600 ${collapsed ? "rotate-180" : ""}`}
+                        className={`w-3.5 h-3.5 transition-transform duration-300 text-slate-500 group-hover:text-purple-900 ${collapsed ? "rotate-180" : ""}`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -174,7 +174,7 @@ export default function Sidebar() {
                     <div className="mb-3 pb-3">
                         <Link
                             href="/dashboard"
-                            className={`flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 px-3 py-2 rounded-lg text-[12px] font-medium text-slate-500 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200`}
+                            className={`flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 px-3 py-2 rounded-lg text-[12px] font-medium text-slate-600 hover:text-purple-900 hover:bg-[#f4ecfb] transition-all duration-200`}
                             title={collapsed ? `Back to ${isSuperAdmin ? "Global View" : "My Events"}` : ""}
                         >
                             <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -212,8 +212,8 @@ export default function Sidebar() {
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center ${collapsed ? "justify-center" : ""} gap-3 ${collapsed ? "px-0 py-3" : "px-3 py-2.5"} rounded-lg text-[13px] font-medium transition-all duration-200 group relative ${isActive
-                                    ? "text-purple-800 bg-purple-100"
-                                    : "text-slate-500 hover:text-purple-700 hover:bg-purple-50"
+                                    ? "text-purple-900 bg-[#eee5f7]"
+                                    : "text-slate-600 hover:text-purple-800 hover:bg-[#f3eef9]"
                                     }`}
                                 title={collapsed ? item.label : ""}
                             >
@@ -241,7 +241,7 @@ export default function Sidebar() {
 
                 {/* User info */}
                 {!collapsed && user && (
-                    <div className="px-3 py-2.5 rounded-lg bg-purple-50 border border-purple-100 sidebar-content-fade">
+                    <div className="px-3 py-2.5 rounded-lg bg-[#faf8fd] border border-purple-800/25 sidebar-content-fade">
                         <div className="flex items-center gap-2.5">
                             <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
                                 <span className="text-purple-700/70 text-[10px] font-bold uppercase">
@@ -275,5 +275,6 @@ export default function Sidebar() {
         </aside>
     );
 }
+
 
 

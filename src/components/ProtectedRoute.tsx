@@ -16,9 +16,9 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#f8f7fb] flex items-center justify-center">
+            <div className="min-h-screen bg-[#f6f3fa] flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
+                    <div className="w-12 h-12 border-4 border-purple-800/40 border-t-purple-500 rounded-full animate-spin" />
                     <p className="text-slate-500 text-sm">Authenticating...</p>
                 </div>
             </div>
@@ -29,3 +29,4 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
     return <>{children}</>;
 }
+

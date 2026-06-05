@@ -34,11 +34,11 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
     return (
         <ActiveEventContext.Provider value={eventState}>
-            <div className="flex h-dvh overflow-hidden bg-[#f8f7fb] text-slate-800">
+            <div className="flex h-dvh overflow-hidden bg-[#f6f3fa] text-slate-800">
                 <Sidebar />
                 <div className="min-w-0 flex-1 flex flex-col h-dvh overflow-hidden">
                     <Header activeEvent={eventState.activeEvent} />
-                    <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-8 bg-[#f8f7fb]">
+                    <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-8 bg-[#f6f3fa]">
                         {children}
                     </main>
                 </div>
@@ -58,3 +58,4 @@ export default function DashboardLayout({
         </ProtectedRoute>
     );
 }
+

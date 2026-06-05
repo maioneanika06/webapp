@@ -100,3 +100,4 @@ export default function UnassignedAttendeesAlert({ activeEvent, onFixed }: Unass
     );
 }
 
+

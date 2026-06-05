@@ -46,7 +46,7 @@ export default function Header({ activeEvent }: HeaderProps) {
     }, [hasStockAlert, outOfStockSlots.length, lowStockSlots.length]);
 
     return (
-        <header className="relative z-10 h-14 shrink-0 flex items-center justify-between px-8 bg-white border-b border-purple-100">
+        <header className="relative z-10 h-14 shrink-0 flex items-center justify-between px-8 bg-white border-b border-purple-800/25">
             {/* Soft bottom edge — gradient instead of border */}
             <div className="hidden" />
 
@@ -60,12 +60,12 @@ export default function Header({ activeEvent }: HeaderProps) {
                                 {activeEvent.status === 'ACTIVE' ? 'Live' : activeEvent.status}
                             </span>
                         </div>
-                        <div className="w-px h-4 bg-purple-100" />
+                        <div className="w-px h-4 bg-purple-800/25" />
                         <p className="text-slate-700 text-[13px] font-semibold tracking-tight">{activeEvent.name}</p>
                     </div>
                 ) : (
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-purple-500/60" />
+                        <div className="w-2 h-2 rounded-full bg-purple-800" />
                         <span className="text-slate-500 text-[12px] font-semibold tracking-wide">Dashboard</span>
                     </div>
                 )}
@@ -101,4 +101,5 @@ export default function Header({ activeEvent }: HeaderProps) {
         </header>
     );
 }
+
 

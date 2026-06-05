@@ -29,7 +29,7 @@ export default function EventLayout({ children }: { children: React.ReactNode })
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-8 h-8 border-2 border-purple-500/15 border-t-purple-400 rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-2 border-purple-800/35 border-t-purple-400 rounded-full animate-spin" />
                     <p className="text-slate-500 text-[13px]">Loading event data...</p>
                 </div>
             </div>
@@ -38,3 +38,4 @@ export default function EventLayout({ children }: { children: React.ReactNode })
 
     return <>{children}</>;
 }
+

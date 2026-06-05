@@ -31,7 +31,7 @@ export default function CompletedEventsDashboard() {
     if (authLoading || eventsLoading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="w-8 h-8 border-2 border-purple-500/15 border-t-purple-400 rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-purple-800/35 border-t-purple-400 rounded-full animate-spin" />
             </div>
         );
     }
@@ -56,4 +56,5 @@ export default function CompletedEventsDashboard() {
         </div>
     );
 }
+
 
