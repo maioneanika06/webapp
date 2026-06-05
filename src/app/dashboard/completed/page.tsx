@@ -45,8 +45,8 @@ export default function CompletedEventsDashboard() {
     return (
         <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
             <div>
-                <h2 className="text-xl font-semibold text-white/90 tracking-tight">Completed Events</h2>
-                <p className="text-white/25 text-[13px] mt-1">View history of finished vending machine events</p>
+                <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Completed Events</h2>
+                <p className="text-slate-400 text-[13px] mt-1">View history of finished vending machine events</p>
             </div>
 
             <EventGrid 
@@ -56,3 +56,4 @@ export default function CompletedEventsDashboard() {
         </div>
     );
 }
+

@@ -5,6 +5,7 @@ import { usePathname, useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { isSuperAdminEmail } from "@/lib/admin";
 import { useState, createContext, useContext } from "react";
+import Image from "next/image";
 
 // Sidebar context so layout can read collapsed state
 interface SidebarContextType {
@@ -121,20 +122,20 @@ export default function Sidebar() {
 
     return (
         <aside
-            className={`${collapsed ? "w-[72px]" : "w-[260px]"} sticky top-0 h-dvh shrink-0 flex flex-col overflow-hidden sidebar-transition relative border-r border-white/[0.055] bg-[#0c0c10]`}
+            className={`${collapsed ? "w-[72px]" : "w-[260px]"} sticky top-0 h-dvh shrink-0 flex flex-col overflow-hidden sidebar-transition relative border-r border-purple-100 bg-white shadow-xl shadow-purple-950/[0.04]`}
         >
             {/* Soft right edge — gradient fade instead of border */}
-            <div className="absolute right-0 top-0 bottom-0 w-px bg-white/[0.025]" />
+            <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-purple-100 to-transparent" />
 
             {/* ── Brand ─────────────────────────────── */}
             <div className={`${collapsed ? "px-4 py-5" : "px-5 py-5"} shrink-0 flex items-center gap-3 transition-all duration-300`}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-purple-500/10 shadow-lg shadow-purple-500/5">
-                    <img src="/VENDY.png" alt="Vendy Logo" className="w-full h-full object-cover" />
+                <div className="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-purple-200 shadow-lg shadow-purple-200/60">
+                    <Image src="/VENDY.png" alt="Vendy Logo" width={40} height={40} className="w-full h-full object-cover" />
                 </div>
                 {!collapsed && (
                     <div className="sidebar-content-fade min-w-0">
-                        <h1 className="text-white font-semibold text-[15px] leading-tight tracking-tight">VENDY</h1>
-                        <p className="text-purple-300/30 text-[10px] tracking-wider uppercase mt-0.5">
+                        <h1 className="text-slate-900 font-bold text-[15px] leading-tight tracking-tight">VENDY</h1>
+                        <p className="text-purple-600/70 text-[10px] tracking-wider uppercase mt-0.5">
                             {isSuperAdmin ? "Super Admin" : "Staff"}
                         </p>
                     </div>
@@ -145,14 +146,14 @@ export default function Sidebar() {
             <div className={`${collapsed ? "px-3" : "px-4"} shrink-0 mb-1 transition-all duration-300`}>
                 <button
                     onClick={() => setCollapsed(!collapsed)}
-                    className={`w-full flex items-center ${collapsed ? "justify-center" : "justify-between"} gap-2 px-2.5 py-2 rounded-lg text-[11px] font-medium text-white/20 hover:text-white/40 hover:bg-white/[0.03] transition-all duration-200 cursor-pointer group`}
+                    className={`w-full flex items-center ${collapsed ? "justify-center" : "justify-between"} gap-2 px-2.5 py-2 rounded-lg text-[11px] font-medium text-slate-400 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200 cursor-pointer group`}
                     title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                     {!collapsed && (
-                        <span className="sidebar-content-fade uppercase tracking-widest text-white/15">Menu</span>
+                        <span className="sidebar-content-fade uppercase tracking-widest text-slate-400">Menu</span>
                     )}
                     <svg
-                        className={`w-3.5 h-3.5 transition-transform duration-300 text-white/20 group-hover:text-white/40 ${collapsed ? "rotate-180" : ""}`}
+                        className={`w-3.5 h-3.5 transition-transform duration-300 text-slate-400 group-hover:text-purple-600 ${collapsed ? "rotate-180" : ""}`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -164,7 +165,7 @@ export default function Sidebar() {
             </div>
 
             {/* ── Divider ─────────────────────────────── */}
-            <div className={`${collapsed ? "mx-3" : "mx-4"} h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent mb-2`} />
+            <div className={`${collapsed ? "mx-3" : "mx-4"} h-px bg-gradient-to-r from-transparent via-purple-100 to-transparent mb-2`} />
 
             {/* ── Navigation ─────────────────────────── */}
             <nav className={`min-h-0 flex-1 overflow-y-auto ${collapsed ? "px-3 py-2" : "px-4 py-2"} transition-all duration-300`}>
@@ -173,7 +174,7 @@ export default function Sidebar() {
                     <div className="mb-3 pb-3">
                         <Link
                             href="/dashboard"
-                            className={`flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 px-3 py-2 rounded-lg text-[12px] font-medium text-white/30 hover:text-white/60 hover:bg-white/[0.03] transition-all duration-200`}
+                            className={`flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 px-3 py-2 rounded-lg text-[12px] font-medium text-slate-500 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200`}
                             title={collapsed ? `Back to ${isSuperAdmin ? "Global View" : "My Events"}` : ""}
                         >
                             <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -185,13 +186,13 @@ export default function Sidebar() {
                                 </span>
                             )}
                         </Link>
-                        <div className="mt-3 h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
+                        <div className="mt-3 h-px bg-gradient-to-r from-transparent via-purple-100 to-transparent" />
                     </div>
                 )}
 
                 {/* Section label */}
                 {!collapsed && (
-                    <p className="px-3 mb-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/15 sidebar-content-fade">
+                    <p className="px-3 mb-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 sidebar-content-fade">
                         {sectionLabel}
                     </p>
                 )}
@@ -211,17 +212,17 @@ export default function Sidebar() {
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center ${collapsed ? "justify-center" : ""} gap-3 ${collapsed ? "px-0 py-3" : "px-3 py-2.5"} rounded-lg text-[13px] font-medium transition-all duration-200 group relative ${isActive
-                                    ? "text-purple-200 bg-purple-500/[0.07]"
-                                    : "text-white/30 hover:text-white/55 hover:bg-white/[0.025]"
+                                    ? "text-purple-800 bg-purple-100 shadow-sm"
+                                    : "text-slate-500 hover:text-purple-700 hover:bg-purple-50"
                                     }`}
                                 title={collapsed ? item.label : ""}
                             >
                                 {/* Active indicator bar */}
                                 {isActive && (
-                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
+                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 rounded-full bg-purple-600" />
                                 )}
 
-                                <span className={`transition-colors duration-200 ${isActive ? "text-purple-300" : "text-white/20 group-hover:text-white/40"}`}>
+                                <span className={`transition-colors duration-200 ${isActive ? "text-purple-700" : "text-slate-400 group-hover:text-purple-600"}`}>
                                     {item.icon}
                                 </span>
                                 {!collapsed && (
@@ -234,22 +235,22 @@ export default function Sidebar() {
             </nav>
 
             {/* ── Footer / Sign Out ──────────────────── */}
-            <div className={`${collapsed ? "px-3" : "px-4"} shrink-0 pb-5 space-y-2 bg-[#0c0c10] transition-all duration-300`}>
+            <div className={`${collapsed ? "px-3" : "px-4"} shrink-0 pb-5 space-y-2 bg-white transition-all duration-300`}>
                 {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent mb-1" />
+                <div className="h-px bg-gradient-to-r from-transparent via-purple-100 to-transparent mb-1" />
 
                 {/* User info */}
                 {!collapsed && user && (
-                    <div className="px-3 py-2.5 rounded-lg bg-white/[0.015] sidebar-content-fade">
+                    <div className="px-3 py-2.5 rounded-lg bg-purple-50 border border-purple-100 sidebar-content-fade">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/10 flex items-center justify-center shrink-0">
-                                <span className="text-purple-300/70 text-[10px] font-bold uppercase">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-white to-purple-50 flex items-center justify-center shrink-0">
+                                <span className="text-purple-700/70 text-[10px] font-bold uppercase">
                                     {user.email?.[0] || "U"}
                                 </span>
                             </div>
                             <div className="min-w-0">
-                                <p className="text-white/40 text-[11px] truncate">{user.email}</p>
-                                <p className="text-white/15 text-[9px] uppercase tracking-wider">
+                                <p className="text-slate-600 text-[11px] truncate">{user.email}</p>
+                                <p className="text-slate-400 text-[9px] uppercase tracking-wider">
                                     {isSuperAdmin ? "Admin" : "Staff"}
                                 </p>
                             </div>
@@ -260,10 +261,10 @@ export default function Sidebar() {
                 {/* Sign out button */}
                 <button
                     onClick={signOut}
-                    className={`w-full flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 ${collapsed ? "px-0 py-2.5" : "px-3 py-2"} rounded-lg text-[12px] font-medium text-white/20 hover:text-red-300/70 hover:bg-red-500/[0.04] transition-all duration-200 cursor-pointer group`}
+                    className={`w-full flex items-center ${collapsed ? "justify-center" : ""} gap-2.5 ${collapsed ? "px-0 py-2.5" : "px-3 py-2"} rounded-lg text-[12px] font-medium text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all duration-200 cursor-pointer group`}
                     title={collapsed ? "Sign Out" : ""}
                 >
-                    <svg className="w-[15px] h-[15px] shrink-0 text-white/15 group-hover:text-red-400/50 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <svg className="w-[15px] h-[15px] shrink-0 text-slate-400 group-hover:text-red-400/50 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                     </svg>
                     {!collapsed && (
@@ -274,3 +275,4 @@ export default function Sidebar() {
         </aside>
     );
 }
+

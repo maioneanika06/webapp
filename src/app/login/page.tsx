@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function LoginPage() {
     const { user, loading, signInWithGoogle } = useAuth();
@@ -26,33 +27,29 @@ export default function LoginPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+            <div className="min-h-screen bg-[#fbf9ff] flex items-center justify-center">
                 <div className="w-10 h-10 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Ambient glow */}
-            <div className="absolute top-[-20%] left-[-10%] w-[40%] h-[40%] bg-purple-600/8 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[40%] h-[40%] bg-pink-600/8 rounded-full blur-[120px] pointer-events-none" />
-
+        <div className="min-h-screen bg-[linear-gradient(180deg,#ffffff_0%,#fbf9ff_100%)] flex items-center justify-center p-4">
             <div className="w-full max-w-sm relative z-10">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl overflow-hidden shadow-lg shadow-purple-500/30 mb-4">
-                        <img src="/VENDY.png" alt="Vendy Logo" className="w-full h-full object-cover" />
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl overflow-hidden border border-purple-100 bg-white shadow-lg shadow-purple-100 mb-4">
+                        <Image src="/VENDY.png" alt="Vendy Logo" width={64} height={64} className="w-full h-full object-cover" priority />
                     </div>
-                    <h1 className="text-2xl font-bold text-white tracking-tight">VENDY</h1>
-                    <p className="text-white/30 text-sm mt-1">Admin Login</p>
+                    <h1 className="text-2xl font-bold text-slate-950 tracking-tight">VENDY</h1>
+                    <p className="text-purple-600 text-sm mt-1">Admin Login</p>
                 </div>
 
                 {/* Login Card */}
-                <div className="backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] rounded-3xl p-8 shadow-2xl shadow-black/20">
+                <div className="bg-white border border-purple-100 rounded-2xl p-8 shadow-xl shadow-purple-950/[0.06]">
                     {error && (
-                        <div className="mb-5 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm flex items-start gap-3">
-                            <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <div className="mb-5 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-start gap-3">
+                            <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9.303 3.376c-.866 1.5-2.178 3.374-3.948 3.374H6.645c-1.77 0-3.082-1.874-3.948-3.374L12 3.378l9.303 12.748zM12 15.75h.007v.008H12v-.008z" />
                             </svg>
                             <span>{error}</span>
@@ -62,7 +59,7 @@ export default function LoginPage() {
                     {/* Google Sign-In Button */}
                     <button
                         onClick={handleGoogleSignIn}
-                        className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white hover:bg-gray-100 text-gray-800 text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg cursor-pointer"
+                        className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-purple-600/20 cursor-pointer"
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -74,10 +71,11 @@ export default function LoginPage() {
                     </button>
                 </div>
 
-                <p className="text-center text-white/15 text-xs mt-6">
-                    Secured admin access · Event Dashboard
+                <p className="text-center text-slate-400 text-xs mt-6">
+                    Secured admin access, Event Dashboard
                 </p>
             </div>
         </div>
     );
 }
+

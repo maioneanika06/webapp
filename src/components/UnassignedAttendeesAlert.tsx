@@ -74,16 +74,16 @@ export default function UnassignedAttendeesAlert({ activeEvent, onFixed }: Unass
     if (loading || count === 0) return null;
 
     return (
-        <div className="mb-6 rounded-xl bg-amber-500/10 border border-amber-500/20 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn">
+        <div className="mb-6 rounded-xl bg-amber-50 border border-amber-200 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn">
             <div className="flex items-center gap-3">
-                <div className="p-2 rounded-full bg-amber-500/10 text-amber-400">
+                <div className="p-2 rounded-full bg-amber-100 text-amber-700">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                     </svg>
                 </div>
                 <div>
-                    <h4 className="text-amber-200 font-semibold text-sm">Sync Issue Detected</h4>
-                    <p className="text-amber-200/60 text-xs mt-0.5">
+                    <h4 className="text-amber-800 font-semibold text-sm">Sync Issue Detected</h4>
+                    <p className="text-amber-700 text-xs mt-0.5">
                         Found {count} attendee{count !== 1 ? "s" : ""} registered without an assigned event.
                     </p>
                 </div>
@@ -92,7 +92,7 @@ export default function UnassignedAttendeesAlert({ activeEvent, onFixed }: Unass
             <button
                 onClick={handleFix}
                 disabled={fixing}
-                className="px-4 py-2 bg-amber-500 text-black text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-amber-400 transition-colors disabled:opacity-50 cursor-pointer shadow-lg shadow-amber-500/10"
+                className="px-4 py-2 bg-amber-500 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 cursor-pointer shadow-lg shadow-amber-500/10"
             >
                 {fixing ? "Syncing..." : "Sync Attendees Now"}
             </button>

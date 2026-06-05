@@ -34,11 +34,11 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
     return (
         <ActiveEventContext.Provider value={eventState}>
-            <div className="flex h-dvh overflow-hidden bg-[#09090b]">
+            <div className="flex h-dvh overflow-hidden bg-[#fbf9ff] text-slate-800">
                 <Sidebar />
                 <div className="min-w-0 flex-1 flex flex-col h-dvh overflow-hidden">
                     <Header activeEvent={eventState.activeEvent} />
-                    <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-8">
+                    <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-8 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.10),transparent_36%),linear-gradient(180deg,#ffffff_0%,#fbf9ff_100%)]">
                         {children}
                     </main>
                 </div>

@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import EventGrid from "@/components/EventGrid";
 import { useActiveEventContext } from "./layout";
 import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 import { isSuperAdminEmail } from "@/lib/admin";
 
 export default function GlobalDashboard() {
@@ -34,8 +33,8 @@ export default function GlobalDashboard() {
         return (
             <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
                 <div>
-                    <h2 className="text-xl font-semibold text-white/90 tracking-tight">Active Events</h2>
-                    <p className="text-white/25 text-[13px] mt-1">Manage ongoing vending machine events</p>
+                    <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Active Events</h2>
+                    <p className="text-slate-400 text-[13px] mt-1">Manage ongoing vending machine events</p>
                 </div>
 
                 <EventGrid 
@@ -50,8 +49,8 @@ export default function GlobalDashboard() {
     return (
         <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
             <div>
-                <h2 className="text-xl font-semibold text-white/90 tracking-tight">My Events</h2>
-                <p className="text-white/25 text-[13px] mt-1">Select an event to view its dashboard</p>
+                <h2 className="text-xl font-semibold text-slate-900 tracking-tight">My Events</h2>
+                <p className="text-slate-400 text-[13px] mt-1">Select an event to view its dashboard</p>
             </div>
 
             <EventGrid 
@@ -61,3 +60,4 @@ export default function GlobalDashboard() {
         </div>
     );
 }
+
