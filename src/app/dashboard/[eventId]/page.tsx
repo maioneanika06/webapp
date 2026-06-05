@@ -39,11 +39,11 @@ export default function EventOverview() {
             </div>
 
             {/* Event Details Card */}
-            <div className={`backdrop-blur-xl bg-white border rounded-2xl p-6 ${activeEvent.status === 'ACTIVE' ? 'border-emerald-200' : 'border-slate-200'}`}>
+            <div className={`bg-white border rounded-2xl p-6 ${activeEvent.status === 'ACTIVE' ? 'border-emerald-200' : 'border-slate-200'}`}>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-xl border flex items-center justify-center ${activeEvent.status === 'ACTIVE' ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-50 border-slate-200'}`}>
-                            <div className={`w-3 h-3 rounded-full ${activeEvent.status === 'ACTIVE' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+                            <div className={`w-3 h-3 rounded-full ${activeEvent.status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
                         </div>
                         <div>
                             <p className="text-slate-500 text-xs uppercase tracking-wider font-medium">
@@ -75,16 +75,16 @@ export default function EventOverview() {
             {/* Stats Grid */}
             {!attendeesLoading && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="backdrop-blur-xl bg-white border border-purple-100 rounded-2xl p-5">
+                    <div className="bg-white border border-purple-100 rounded-2xl p-5">
                         <p className="text-slate-500 text-xs uppercase tracking-wider font-medium">Total Attendees</p>
                         <p className="text-3xl font-bold text-slate-900 mt-1">{totalCount}</p>
                     </div>
-                    <div className="backdrop-blur-xl bg-white border border-emerald-100 rounded-2xl p-5">
+                    <div className="bg-white border border-emerald-100 rounded-2xl p-5">
                         <p className="text-slate-500 text-xs uppercase tracking-wider font-medium">Kits Claimed</p>
                         <p className="text-3xl font-bold text-emerald-600 mt-1">{claimedCount}</p>
                         <p className="text-slate-400 text-xs mt-1">{totalCount > 0 ? Math.round((claimedCount / totalCount) * 100) : 0}% claimed</p>
                     </div>
-                    <div className="backdrop-blur-xl bg-white border border-purple-100 rounded-2xl p-5">
+                    <div className="bg-white border border-purple-100 rounded-2xl p-5">
                         <p className="text-slate-500 text-xs uppercase tracking-wider font-medium">Unclaimed</p>
                         <p className="text-3xl font-bold text-purple-700 mt-1">{totalCount - claimedCount}</p>
                     </div>
@@ -93,4 +93,5 @@ export default function EventOverview() {
         </div>
     );
 }
+
 

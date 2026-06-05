@@ -46,7 +46,7 @@ export default function Header({ activeEvent }: HeaderProps) {
     }, [hasStockAlert, outOfStockSlots.length, lowStockSlots.length]);
 
     return (
-        <header className="relative z-10 h-14 shrink-0 flex items-center justify-between px-8 bg-white/90 backdrop-blur-xl border-b border-purple-100 shadow-sm shadow-purple-950/[0.03]">
+        <header className="relative z-10 h-14 shrink-0 flex items-center justify-between px-8 bg-white border-b border-purple-100">
             {/* Soft bottom edge — gradient instead of border */}
             <div className="hidden" />
 
@@ -55,7 +55,7 @@ export default function Header({ activeEvent }: HeaderProps) {
                 {activeEvent ? (
                     <div className="flex items-center gap-3">
                         <div className="flex items-center gap-2">
-                            <div className={`w-1.5 h-1.5 rounded-full ${activeEvent.status === 'ACTIVE' ? 'bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.12)]' : 'bg-slate-400'}`} />
+                            <div className={`w-1.5 h-1.5 rounded-full ${activeEvent.status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
                             <span className={`text-[10px] font-semibold uppercase tracking-wider ${activeEvent.status === 'ACTIVE' ? 'text-emerald-700' : 'text-slate-500'}`}>
                                 {activeEvent.status === 'ACTIVE' ? 'Live' : activeEvent.status}
                             </span>

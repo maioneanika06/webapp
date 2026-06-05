@@ -122,14 +122,14 @@ export default function Sidebar() {
 
     return (
         <aside
-            className={`${collapsed ? "w-[72px]" : "w-[260px]"} sticky top-0 h-dvh shrink-0 flex flex-col overflow-hidden sidebar-transition relative border-r border-purple-100 bg-white shadow-xl shadow-purple-950/[0.04]`}
+            className={`${collapsed ? "w-[72px]" : "w-[260px]"} sticky top-0 h-dvh shrink-0 flex flex-col overflow-hidden sidebar-transition relative border-r border-purple-100 bg-white`}
         >
             {/* Soft right edge — gradient fade instead of border */}
-            <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-purple-100 to-transparent" />
+            <div className="absolute right-0 top-0 bottom-0 w-px bg-purple-100" />
 
             {/* ── Brand ─────────────────────────────── */}
             <div className={`${collapsed ? "px-4 py-5" : "px-5 py-5"} shrink-0 flex items-center gap-3 transition-all duration-300`}>
-                <div className="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-purple-200 shadow-lg shadow-purple-200/60">
+                <div className="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-purple-200">
                     <Image src="/VENDY.png" alt="Vendy Logo" width={40} height={40} className="w-full h-full object-cover" />
                 </div>
                 {!collapsed && (
@@ -165,7 +165,7 @@ export default function Sidebar() {
             </div>
 
             {/* ── Divider ─────────────────────────────── */}
-            <div className={`${collapsed ? "mx-3" : "mx-4"} h-px bg-gradient-to-r from-transparent via-purple-100 to-transparent mb-2`} />
+            <div className={`${collapsed ? "mx-3" : "mx-4"} h-px bg-purple-100 mb-2`} />
 
             {/* ── Navigation ─────────────────────────── */}
             <nav className={`min-h-0 flex-1 overflow-y-auto ${collapsed ? "px-3 py-2" : "px-4 py-2"} transition-all duration-300`}>
@@ -186,7 +186,7 @@ export default function Sidebar() {
                                 </span>
                             )}
                         </Link>
-                        <div className="mt-3 h-px bg-gradient-to-r from-transparent via-purple-100 to-transparent" />
+                        <div className="mt-3 h-px bg-purple-100" />
                     </div>
                 )}
 
@@ -212,7 +212,7 @@ export default function Sidebar() {
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center ${collapsed ? "justify-center" : ""} gap-3 ${collapsed ? "px-0 py-3" : "px-3 py-2.5"} rounded-lg text-[13px] font-medium transition-all duration-200 group relative ${isActive
-                                    ? "text-purple-800 bg-purple-100 shadow-sm"
+                                    ? "text-purple-800 bg-purple-100"
                                     : "text-slate-500 hover:text-purple-700 hover:bg-purple-50"
                                     }`}
                                 title={collapsed ? item.label : ""}
@@ -237,13 +237,13 @@ export default function Sidebar() {
             {/* ── Footer / Sign Out ──────────────────── */}
             <div className={`${collapsed ? "px-3" : "px-4"} shrink-0 pb-5 space-y-2 bg-white transition-all duration-300`}>
                 {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-purple-100 to-transparent mb-1" />
+                <div className="h-px bg-purple-100 mb-1" />
 
                 {/* User info */}
                 {!collapsed && user && (
                     <div className="px-3 py-2.5 rounded-lg bg-purple-50 border border-purple-100 sidebar-content-fade">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-white to-purple-50 flex items-center justify-center shrink-0">
+                            <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
                                 <span className="text-purple-700/70 text-[10px] font-bold uppercase">
                                     {user.email?.[0] || "U"}
                                 </span>
@@ -275,4 +275,5 @@ export default function Sidebar() {
         </aside>
     );
 }
+
 

@@ -139,7 +139,7 @@ export default function UsersTable({
 
     if (loading) {
         return (
-            <div className="backdrop-blur-xl bg-white border border-purple-100 rounded-2xl p-12">
+            <div className="bg-white border border-purple-100 rounded-2xl p-12">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-10 h-10 border-3 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
                     <p className="text-slate-500 text-sm">Loading attendees...</p>
@@ -168,7 +168,7 @@ export default function UsersTable({
             </div>
 
             {/* Toolbar */}
-            <div className="backdrop-blur-xl bg-white border border-purple-100 rounded-2xl p-4">
+            <div className="bg-white border border-purple-100 rounded-2xl p-4">
                 <div className="flex flex-wrap items-center gap-3">
                     {/* Search */}
                     <div className="relative flex-1 min-w-[240px]">
@@ -221,7 +221,7 @@ export default function UsersTable({
             </div>
 
             {/* Table */}
-            <div className="backdrop-blur-xl bg-white border border-purple-100 rounded-2xl overflow-hidden">
+            <div className="bg-white border border-purple-100 rounded-2xl overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
@@ -305,4 +305,5 @@ export default function UsersTable({
         </div>
     );
 }
+
 

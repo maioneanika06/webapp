@@ -31,10 +31,10 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
     const isLowStock = currentStock > 0 && currentStock <= 2;
     const stockPercent = (currentStock / MAX_CAPACITY) * 100;
 
-    const roleColors: Record<string, { bg: string; text: string; border: string; glow: string }> = {
-        vip: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200", glow: "shadow-amber-100" },
-        speaker: { bg: "bg-sky-50", text: "text-sky-700", border: "border-sky-200", glow: "shadow-sky-100" },
-        attendee: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200", glow: "shadow-purple-100" },
+    const roleColors: Record<string, { bg: string; text: string; border: string }> = {
+        vip: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
+        speaker: { bg: "bg-sky-50", text: "text-sky-700", border: "border-sky-200" },
+        attendee: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
     };
 
     const colors = roleColors[slot.assigned_role] || roleColors.attendee;
@@ -71,7 +71,7 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
     };
 
     return (
-        <div className={`backdrop-blur-xl bg-white border border-purple-100 rounded-2xl p-5 transition-all duration-300 hover:border-purple-200 hover:shadow-lg ${colors.glow}`}>
+        <div className="bg-white border border-purple-100 rounded-2xl p-5 transition-colors duration-200 hover:border-purple-200">
             <div className="flex items-start justify-between gap-4 mb-5">
                 <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-xl ${colors.bg} ${colors.border} border flex items-center justify-center`}>
@@ -154,4 +154,5 @@ export default function SlotCard({ slot, onUpdate, onRestock, isReadOnly = false
         </div>
     );
 }
+
 

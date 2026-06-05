@@ -92,10 +92,11 @@ export default function UnassignedAttendeesAlert({ activeEvent, onFixed }: Unass
             <button
                 onClick={handleFix}
                 disabled={fixing}
-                className="px-4 py-2 bg-amber-500 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 cursor-pointer shadow-lg shadow-amber-500/10"
+                className="px-4 py-2 bg-amber-500 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 cursor-pointer"
             >
                 {fixing ? "Syncing..." : "Sync Attendees Now"}
             </button>
         </div>
     );
 }
+

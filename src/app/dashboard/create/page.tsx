@@ -111,7 +111,7 @@ export default function CreateEventDashboard() {
                         <button
                             onClick={handleCreate}
                             disabled={creating || !eventName.trim() || !eventDate || !organizerEmail.trim()}
-                            className="w-full py-3 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg transition-all duration-200 disabled:opacity-30 disabled:hover:bg-purple-600 shadow-lg shadow-purple-600/15 cursor-pointer flex items-center justify-center gap-2"
+                            className="w-full py-3 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg transition-all duration-200 disabled:opacity-30 disabled:hover:bg-purple-600 cursor-pointer flex items-center justify-center gap-2"
                         >
                             {creating ? (
                                 <>
@@ -126,4 +126,5 @@ export default function CreateEventDashboard() {
         </div>
     );
 }
+
 

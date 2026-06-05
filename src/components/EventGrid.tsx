@@ -33,7 +33,7 @@ export default function EventGrid({ events, emptyMessage }: EventGridProps) {
                             {/* Top row: status + arrow */}
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-2">
-                                    <div className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.45)]" : "bg-slate-400"}`} />
+                                    <div className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-emerald-500" : "bg-slate-400"}`} />
                                     <span className={`text-[10px] font-semibold uppercase tracking-[0.1em] ${isActive ? "text-emerald-700" : "text-slate-500"}`}>
                                         {isActive ? "Live" : "Ended"}
                                     </span>
@@ -79,4 +79,5 @@ export default function EventGrid({ events, emptyMessage }: EventGridProps) {
         </div>
     );
 }
+
 
